@@ -8,7 +8,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 body{background:linear-gradient(135deg,#0f172a,#1e3a8a);min-height:100vh;padding:20px;color:white}
-.container{width:100%;max-width:520px;margin:auto;padding-top:35px}
+.container{width:100%;max-width:560px;margin:auto;padding-top:25px}
 .logo{text-align:center;font-size:34px;font-weight:bold;margin-bottom:10px}
 .subtitle{text-align:center;font-size:16px;opacity:.85;margin-bottom:22px}
 .card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border-radius:24px;padding:20px;border:1px solid rgba(255,255,255,.15);margin-bottom:16px}
@@ -27,9 +27,15 @@ textarea{min-height:90px;resize:vertical}
 .small-btn{padding:9px 12px;border:none;border-radius:12px;background:#dc2626;color:white;font-weight:bold}
 .helper{font-size:12px;opacity:.75;margin-top:6px;line-height:1.5}
 .info{background:rgba(0,0,0,.22);border-radius:18px;padding:14px;line-height:1.8;margin-bottom:14px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.tab{padding:12px 6px;border:none;border-radius:12px;background:rgba(255,255,255,.14);color:white;font-weight:bold}
+.tab.active{background:#f59e0b}
+.tabPage{display:none}
+.tabPage.active{display:block}
 .question-item{background:rgba(255,255,255,.1);border-radius:16px;padding:14px;margin-top:12px}
 .answer-row{display:grid;grid-template-columns:1fr 90px;gap:8px;margin-top:10px}
 .version{text-align:center;margin-top:20px;font-size:12px;opacity:.6}
+.file-input{background:white;color:#111}
 </style>
 </head>
 
@@ -48,7 +54,10 @@ textarea{min-height:90px;resize:vertical}
 <div id="errorMsg" class="error">اسم المستخدم أو كلمة المرور غير صحيحة</div>
 </div>
 
-<div class="version">Session valid for 3 hours</div>
+<div class="version">
+Version 1.2<br>
+Session valid for 3 hours
+</div>
 </div>
 
 <div id="homePage" class="hidden">
@@ -90,17 +99,29 @@ textarea{min-height:90px;resize:vertical}
 </div>
 </div>
 
-<div id="controlPage" class="hidden">
+<div id="hostPage" class="hidden">
 
 <div class="topbar">
 <div>
-<strong>لوحة إدارة الغرفة</strong><br>
+<strong>لوحة المضيف 🎮</strong><br>
 <small id="roomMiniCode"></small>
 </div>
 <button class="small-btn" onclick="logout()">تسجيل خروج</button>
 </div>
 
+<div class="tabs">
+<button class="tab active" onclick="openTab('roomTab',this)">الغرفة</button>
+<button class="tab" onclick="openTab('questionsTab',this)">الأسئلة</button>
+<button class="tab" onclick="openTab('toolsTab',this)">الملفات</button>
+<button class="tab" onclick="openTab('playTab',this)">اللعب</button>
+</div>
+
+<div id="roomTab" class="tabPage active">
 <div id="roomInfo" class="info"></div>
+<button class="btn btn-danger" onclick="resetRoom()">حذف الغرفة والبدء من جديد</button>
+</div>
+
+<div id="questionsTab" class="tabPage">
 
 <div class="card">
 <h3>إضافة سؤال</h3>
@@ -119,7 +140,32 @@ textarea{min-height:90px;resize:vertical}
 <div id="questionsList" class="helper">لا توجد أسئلة حتى الآن</div>
 </div>
 
-<button class="btn btn-danger" onclick="resetRoom()">حذف الغرفة والبدء من جديد</button>
+</div>
+
+<div id="toolsTab" class="tabPage">
+
+<div class="card">
+<h3>استيراد ملف أسئلة</h3>
+<div class="helper">صيغة الملف يجب أن تكون JSON.</div>
+<input class="file-input" type="file" accept=".json" onchange="importQuestions(event)">
+</div>
+
+<div class="card">
+<h3>تصدير الأسئلة</h3>
+<button class="btn btn-secondary" onclick="exportQuestions()">تحميل نسخة الأسئلة</button>
+</div>
+
+</div>
+
+<div id="playTab" class="tabPage">
+
+<div class="card">
+<h3>شاشة اللعب</h3>
+<div class="helper">هذه الصفحة مؤقتة. في المرحلة القادمة سنضيف اختيار السؤال، كشف الإجابات، النقاط، والمؤقت.</div>
+<button class="btn btn-primary" onclick="alert('سنبدأ بناء شاشة اللعب في المرحلة القادمة')">بدء التجهيز للعب</button>
+</div>
+
+</div>
 
 </div>
 
@@ -135,9 +181,10 @@ const saved=localStorage.getItem(SESSION_KEY);
 if(!saved)return;
 const data=JSON.parse(saved);
 const now=new Date().getTime();
+
 if(now < data.expiresAt){
 const room=localStorage.getItem(ROOM_KEY);
-if(room){showControl(JSON.parse(room));}
+if(room){showHost(JSON.parse(room));}
 else{showHome();}
 }else{
 localStorage.removeItem(SESSION_KEY);
@@ -147,6 +194,7 @@ localStorage.removeItem(SESSION_KEY);
 function login(){
 const user=document.getElementById("username").value.trim().toLowerCase();
 const pass=document.getElementById("password").value;
+
 if(user==="a7_ib" && pass==="Admin@123"){
 const expiresAt=new Date().getTime()+(SESSION_HOURS*60*60*1000);
 localStorage.setItem(SESSION_KEY,JSON.stringify({loggedIn:true,expiresAt}));
@@ -159,7 +207,7 @@ document.getElementById("errorMsg").style.display="block";
 function showHome(){
 document.getElementById("loginPage").classList.add("hidden");
 document.getElementById("homePage").classList.remove("hidden");
-document.getElementById("controlPage").classList.add("hidden");
+document.getElementById("hostPage").classList.add("hidden");
 }
 
 function logout(){
@@ -221,13 +269,13 @@ questions:[]
 };
 
 localStorage.setItem(ROOM_KEY,JSON.stringify(room));
-showControl(room);
+showHost(room);
 }
 
-function showControl(room){
+function showHost(room){
 document.getElementById("loginPage").classList.add("hidden");
 document.getElementById("homePage").classList.add("hidden");
-document.getElementById("controlPage").classList.remove("hidden");
+document.getElementById("hostPage").classList.remove("hidden");
 
 document.getElementById("roomMiniCode").innerText=room.code;
 
@@ -246,9 +294,16 @@ buildAnswerInputs();
 renderQuestions(room);
 }
 
+function openTab(id,btn){
+document.querySelectorAll(".tabPage").forEach(x=>x.classList.remove("active"));
+document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+btn.classList.add("active");
+}
+
 function buildAnswerInputs(){
 let html="";
-for(let i=1;i<=5;i++){
+for(let i=1;i<=6;i++){
 html+=`
 <label>الإجابة ${i}</label>
 <div class="answer-row">
@@ -270,7 +325,7 @@ return;
 }
 
 const answers=[];
-for(let i=1;i<=5;i++){
+for(let i=1;i<=6;i++){
 const text=document.getElementById("answer"+i).value.trim();
 const points=document.getElementById("points"+i).value;
 if(text){
@@ -291,7 +346,7 @@ renderQuestions(room);
 
 function clearQuestionForm(){
 document.getElementById("questionText").value="";
-for(let i=1;i<=5;i++){
+for(let i=1;i<=6;i++){
 document.getElementById("answer"+i).value="";
 document.getElementById("points"+i).value="";
 }
@@ -313,11 +368,58 @@ html+=`
 <ul style="margin-top:8px;padding-right:20px">
 ${q.answers.map(a=>`<li>${a.text} - ${a.points} نقطة</li>`).join("")}
 </ul>
+<button class="btn btn-danger" onclick="deleteQuestion(${index})">حذف السؤال</button>
 </div>
 `;
 });
 
 box.innerHTML=html;
+}
+
+function deleteQuestion(index){
+const room=JSON.parse(localStorage.getItem(ROOM_KEY));
+room.questions.splice(index,1);
+localStorage.setItem(ROOM_KEY,JSON.stringify(room));
+renderQuestions(room);
+}
+
+function importQuestions(event){
+const file=event.target.files[0];
+if(!file)return;
+
+const reader=new FileReader();
+reader.onload=function(e){
+try{
+const imported=JSON.parse(e.target.result);
+if(!Array.isArray(imported)){
+alert("ملف غير صحيح");
+return;
+}
+
+const room=JSON.parse(localStorage.getItem(ROOM_KEY));
+room.questions=room.questions.concat(imported);
+localStorage.setItem(ROOM_KEY,JSON.stringify(room));
+renderQuestions(room);
+alert("تم استيراد الأسئلة بنجاح");
+}catch{
+alert("تعذر قراءة الملف");
+}
+};
+reader.readAsText(file);
+}
+
+function exportQuestions(){
+const room=JSON.parse(localStorage.getItem(ROOM_KEY));
+const data=JSON.stringify(room.questions || [],null,2);
+const blob=new Blob([data],{type:"application/json"});
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+a.href=url;
+a.download="family-feud-questions.json";
+a.click();
+
+URL.revokeObjectURL(url);
 }
 
 function resetRoom(){
