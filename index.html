@@ -3,433 +3,319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family Feud Arabia</title>
+<title>AH Family Feud</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
-body{background:linear-gradient(135deg,#0f172a,#1e3a8a);min-height:100vh;padding:20px;color:white}
-.container{width:100%;max-width:560px;margin:auto;padding-top:25px}
-.logo{text-align:center;font-size:34px;font-weight:bold;margin-bottom:10px}
-.subtitle{text-align:center;font-size:16px;opacity:.85;margin-bottom:22px}
-.card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border-radius:24px;padding:20px;border:1px solid rgba(255,255,255,.15);margin-bottom:16px}
-label{display:block;margin-top:14px;margin-bottom:6px;font-weight:bold}
-input,select,textarea{width:100%;padding:14px;border:none;border-radius:14px;font-size:16px;outline:none}
-textarea{min-height:90px;resize:vertical}
-.login-input{margin-top:12px;background:white}
-.btn{width:100%;padding:15px;border:none;border-radius:14px;font-size:17px;font-weight:bold;margin-top:14px;cursor:pointer}
-.btn-primary{background:#f59e0b;color:white}
-.btn-secondary{background:#2563eb;color:white}
-.btn-danger{background:#dc2626;color:white}
-.btn-light{background:white;color:#1e3a8a}
-.error{color:#fecaca;margin-top:12px;font-size:14px;display:none;text-align:center}
-.hidden{display:none}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:10px}
-.small-btn{padding:9px 12px;border:none;border-radius:12px;background:#dc2626;color:white;font-weight:bold}
-.helper{font-size:12px;opacity:.75;margin-top:6px;line-height:1.5}
-.info{background:rgba(0,0,0,.22);border-radius:18px;padding:14px;line-height:1.8;margin-bottom:14px}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
-.tab{padding:12px 6px;border:none;border-radius:12px;background:rgba(255,255,255,.14);color:white;font-weight:bold}
-.tab.active{background:#f59e0b}
-.tabPage{display:none}
-.tabPage.active{display:block}
-.question-item{background:rgba(255,255,255,.1);border-radius:16px;padding:14px;margin-top:12px}
-.answer-row{display:grid;grid-template-columns:1fr 90px;gap:8px;margin-top:10px}
-.version{text-align:center;margin-top:20px;font-size:12px;opacity:.6}
-.file-input{background:white;color:#111}
+:root{
+--bg:#071226;
+--panel:#121b31;
+--panel2:#182238;
+--line:#2d3850;
+--gold:#e8bb3f;
+--blue:#2f80ff;
+--red:#ef5b73;
+--text:#ffffff;
+--muted:#9aa4b8;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+.page{display:none;min-height:100vh;padding:22px}
+.page.active{display:block}
+.container{max-width:560px;margin:auto}
+.logo{text-align:center;margin:35px 0 15px;font-size:34px;font-weight:900;color:var(--gold);text-shadow:0 0 20px #e8bb3f66}
+.sub{text-align:center;color:var(--muted);margin-bottom:28px;font-size:17px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:20px;margin-bottom:18px}
+input,select,textarea{width:100%;padding:15px;border-radius:14px;border:1px solid #3a465e;background:#222b3d;color:white;font-size:16px;outline:none}
+textarea{min-height:95px;resize:vertical}
+label{display:block;margin:16px 0 7px;font-weight:800;color:#d7dbea}
+.btn{width:100%;border:0;border-radius:16px;padding:16px;margin-top:14px;font-size:18px;font-weight:900;cursor:pointer}
+.gold{background:var(--gold);color:#111827}
+.blue{background:#1d4ed8;color:white}
+.red{background:#7f1d2d;color:#ffb4c0;border:1px solid #ef5b7355}
+.gray{background:#263044;color:white;border:1px solid #46536d}
+.hidden{display:none!important}
+.version{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+.iconBtn{width:50px;height:50px;border-radius:16px;background:#20283a;border:1px solid #3b455c;color:white;font-size:24px}
+.pill{padding:10px 18px;border-radius:18px;background:#1c2638;border:1px solid #34415a;color:#b8c2d8}
+.teamBar{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.teamScore{border-radius:18px;padding:12px;border:1px solid}
+.teamA{background:#08213f;border-color:#1d4ed8;color:#67a6ff}
+.teamB{background:#321927;border-color:#ef5b73;color:#ff8fa0}
+.scoreRow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.scoreBtns{display:flex;align-items:center;gap:8px}
+.mini{width:38px;height:38px;border-radius:12px;border:0;background:#30384b;color:white;font-size:22px;font-weight:900}
+.scoreNum{font-size:28px;color:var(--gold);font-weight:900}
+.centerEmpty{min-height:380px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--muted)}
+.bigIcon{font-size:52px;color:#6b5b2d;margin-bottom:20px}
+.menuPanel{position:fixed;top:125px;right:0;left:0;background:#101447;border-bottom-left-radius:26px;border-bottom-right-radius:26px;border:1px solid #29327a;padding:26px;z-index:20;box-shadow:0 20px 70px #0008}
+.menuItem{display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:17px 6px;color:white}
+.menuItem span{font-size:28px;width:36px;text-align:center;color:#7aa7ff}
+.menuItem b{font-size:21px}
+.menuItem small{display:block;color:#9aa4b8;margin-top:5px}
+.sep{height:1px;background:#2b335d;margin:12px 0}
+.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}
+.modalBox{background:#11164f;border:1px solid #354091;border-radius:26px;padding:24px;width:100%;max-width:420px;text-align:center}
+.qr{width:230px;height:230px;background:white;margin:20px auto;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#000;font-size:88px}
+.answerRow{display:grid;grid-template-columns:1fr 90px;gap:8px;margin-top:10px}
+.questionItem{background:#172035;border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:12px}
+.previewCard{border:1px solid #6b5b2d;border-radius:26px;padding:24px;background:#171f31;margin-top:18px}
+.previewQ{font-size:26px;font-weight:900;text-align:center;margin:15px 0}
+.previewAns{display:flex;justify-content:space-between;align-items:center;background:#242c3c;border:1px solid #4a5367;border-radius:16px;padding:14px 18px;margin-top:10px;font-size:18px;font-weight:800}
+.playAnswer{display:flex;align-items:center;justify-content:space-between;background:#172035;border:1px solid #344056;border-radius:16px;padding:14px;margin-top:10px;color:#9aa4b8;font-weight:900}
+.playAnswer.revealed{color:white;border-color:#4d5b77}
+.checkbox{width:26px;height:26px;border-radius:8px;background:#293246;border:1px solid #46536d}
+.bottomControls{position:sticky;bottom:0;background:#081326ee;border-top:1px solid #25334c;padding:14px 0;margin-top:18px}
+.controlGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.smallControl{padding:12px;border-radius:12px;border:1px solid #344056;background:#172035;color:white;font-weight:900}
 </style>
 </head>
 
 <body>
 
+<section id="loginPage" class="page active">
 <div class="container">
-
-<div id="loginPage">
-<div class="logo">🔐 Login</div>
-<div class="subtitle">تسجيل الدخول للعبة</div>
+<div class="logo">AH<br>فاميلي فيود</div>
+<div class="sub">لوحة تحكم المتحكم</div>
 
 <div class="card">
-<input id="username" class="login-input" type="text" placeholder="Username">
-<input id="password" class="login-input" type="password" placeholder="Password">
-<button class="btn btn-primary" onclick="login()">دخول</button>
-<div id="errorMsg" class="error">اسم المستخدم أو كلمة المرور غير صحيحة</div>
+<label>اسم المستخدم</label>
+<input id="username" dir="ltr" placeholder="User Name">
+
+<label>كلمة المرور</label>
+<input id="password" dir="ltr" type="password" placeholder="••••••">
+
+<button class="btn gold" onclick="login()">دخول ↪</button>
+<div id="loginError" class="sub hidden" style="color:#ffb4c0;margin-top:12px">بيانات الدخول غير صحيحة</div>
 </div>
 
-<div class="version">
-Version 1.2<br>
-Session valid for 3 hours
+<div class="version">Version 2.0<br>Session valid for 3 hours</div>
 </div>
-</div>
+</section>
 
-<div id="homePage" class="hidden">
-
-<div class="topbar">
-<div>
-<strong>Family Feud 🎯</strong><br>
-<small>إعداد غرفة جديدة</small>
-</div>
-<button class="small-btn" onclick="logout()">تسجيل خروج</button>
+<section id="settingsPage" class="page">
+<div class="container">
+<div class="top">
+<div style="color:#9aa4b8">A7_IB</div>
+<h2>⚙️ إعدادات الجولة</h2>
+<button class="iconBtn" onclick="logout()">←</button>
 </div>
 
 <div class="card">
+<h2 style="margin-bottom:10px">أسماء الفرق</h2>
+<label style="color:#67a6ff">الفريق الأول</label>
+<input id="team1" value="عائلة أ">
 
-<label>اسم الغرفة</label>
-<input id="roomName" placeholder="مثال: تحدي العائلة">
+<label style="color:#ff8fa0">الفريق الثاني</label>
+<input id="team2" value="عائلة ب">
+</div>
 
-<label>اسم الفريق الأول</label>
-<input id="team1" placeholder="الفريق الأزرق">
-
-<label>اسم الفريق الثاني</label>
-<input id="team2" placeholder="الفريق الذهبي">
-
+<div class="card">
 <label>طريقة الفوز</label>
-<select id="winMode" onchange="updateWinMode()">
-<option value="points">عدد نقاط مستهدف</option>
-<option value="rounds">عدد جولات</option>
+<select id="winMode" onchange="updateTargetLabel()">
+<option value="points">النقاط المستهدفة</option>
+<option value="rounds">عدد الجولات</option>
 </select>
 
-<label id="targetLabel">قيمة النقاط المستهدفة</label>
-<input id="targetValue" type="text" inputmode="numeric" value="100" placeholder="مثال: 100 أو 1,000">
+<label id="targetLabel">النقاط المستهدفة</label>
+<input id="targetValue" inputmode="numeric" placeholder="اتركها فاضية بدون حد">
 
-<label>المؤقت الأساسي للإجابة بالثواني</label>
-<input id="timer" type="number" value="10">
-<div class="helper">يمكن تغييره أثناء اللعب لكل سؤال أو جولة.</div>
-
-<button class="btn btn-primary" onclick="createRoom()">إنشاء الغرفة</button>
-
+<div class="sub" style="text-align:right;margin:8px 0 0">إذا وصل فريق لهذا الرقم تنتهي اللعبة تلقائيًا.</div>
 </div>
-</div>
-
-<div id="hostPage" class="hidden">
-
-<div class="topbar">
-<div>
-<strong>لوحة المضيف 🎮</strong><br>
-<small id="roomMiniCode"></small>
-</div>
-<button class="small-btn" onclick="logout()">تسجيل خروج</button>
-</div>
-
-<div class="tabs">
-<button class="tab active" onclick="openTab('roomTab',this)">الغرفة</button>
-<button class="tab" onclick="openTab('questionsTab',this)">الأسئلة</button>
-<button class="tab" onclick="openTab('toolsTab',this)">الملفات</button>
-<button class="tab" onclick="openTab('playTab',this)">اللعب</button>
-</div>
-
-<div id="roomTab" class="tabPage active">
-<div id="roomInfo" class="info"></div>
-<button class="btn btn-danger" onclick="resetRoom()">حذف الغرفة والبدء من جديد</button>
-</div>
-
-<div id="questionsTab" class="tabPage">
 
 <div class="card">
-<h3>إضافة سؤال</h3>
+<h2>وقت كل سؤال ⏱</h2>
+<div class="controlGrid" style="margin-top:16px">
+<button class="smallControl timerPick activeTimer" onclick="setTimer(10,this)">10ث</button>
+<button class="smallControl timerPick" onclick="setTimer(15,this)">15ث</button>
+<button class="smallControl timerPick" onclick="setTimer(20,this)">20ث</button>
+</div>
+</div>
 
-<label>السؤال</label>
-<textarea id="questionText" placeholder="اكتب السؤال هنا"></textarea>
+<button class="btn gold" onclick="saveSettings()">حفظ الإعدادات</button>
+</div>
+</section>
 
+<section id="lobbyPage" class="page">
+<div class="container">
+<div class="top">
+<button class="iconBtn" onclick="toggleMenu()">☰</button>
+<div class="pill" id="roomLabel">معلومات الغرفة</div>
+<div class="logo" style="font-size:18px;margin:0">AH</div>
+</div>
+
+<div class="teamBar">
+<div class="teamScore teamB">
+<div class="scoreRow">
+<button class="mini" onclick="changeScore('b',1)">+</button>
+<div><b id="teamBName">عائلة ب</b></div>
+<div class="scoreBtns"><span id="scoreB" class="scoreNum">0</span><button class="mini" onclick="changeScore('b',-1)">-</button></div>
+</div>
+</div>
+
+<div class="teamScore teamA">
+<div class="scoreRow">
+<button class="mini" onclick="changeScore('a',1)">+</button>
+<div><b id="teamAName">عائلة أ</b></div>
+<div class="scoreBtns"><span id="scoreA" class="scoreNum">0</span><button class="mini" onclick="changeScore('a',-1)">-</button></div>
+</div>
+</div>
+</div>
+
+<div id="lobbyEmpty" class="centerEmpty">
+<div class="bigIcon">📖</div>
+<div>اختر سؤالًا لمعاينته قبل البدء</div>
+<button class="btn gold" style="max-width:360px" onclick="previewRandomQuestion()">🔍 معاينة سؤال عشوائي</button>
+</div>
+
+<div id="previewBox" class="hidden"></div>
+<div id="playBox" class="hidden"></div>
+
+<div id="menuPanel" class="menuPanel hidden">
+<div class="menuItem" onclick="showTvModal()"><span>📺</span><div><b>عرض التلفزيون</b><small>QR code لفتح شاشة العرض</small></div></div>
+<div class="menuItem" onclick="goSettingsFromMenu()"><span>⚙️</span><div><b>الإعدادات</b><small>أسماء الفرق، المؤقت، النقاط المستهدفة</small></div></div>
+<div class="menuItem" onclick="showQuestionBank()"><span>📖</span><div><b>بنك الأسئلة</b><small>إدارة الأسئلة والإجابات</small></div></div>
+<div class="menuItem"><span>👥</span><div><b>المستخدمون</b><small>إدارة حسابات المستخدمين</small></div></div>
+<div class="menuItem"><span>❔</span><div><b>تعليمات اللعب</b><small>قواعد وطريقة اللعب</small></div></div>
+<div class="sep"></div>
+<div class="menuItem" onclick="newRound()"><span style="color:#ff6b7d">↻</span><div><b style="color:#ff6b7d">جولة جديدة</b><small>إعادة اللعبة من الصفر</small></div></div>
+<div class="menuItem" onclick="logout()"><span>↪</span><div><b style="color:#9aa4b8">خروج</b></div></div>
+</div>
+</div>
+</section>
+
+<section id="bankPage" class="page">
+<div class="container">
+<div class="top">
+<button class="iconBtn" onclick="showLobby()">←</button>
+<div><h2 style="color:var(--gold)">بنك الأسئلة</h2><small id="questionCount" class="sub">0 سؤال</small></div>
+<button class="gray" style="width:auto;padding:12px 18px;border-radius:14px" onclick="showLobby()">العودة</button>
+</div>
+
+<div class="top">
+<button class="gray" style="width:auto;padding:12px 18px;border-radius:14px" onclick="document.getElementById('jsonFile').click()">رفع JSON ⬆</button>
+<button class="red" style="width:auto;padding:12px 18px;border-radius:14px" onclick="clearAllQuestions()">حذف الكل 🗑</button>
+<input id="jsonFile" type="file" accept=".json" class="hidden" onchange="importQuestions(event)">
+</div>
+
+<div class="card">
+<h2 style="color:var(--gold)">+ إضافة سؤال جديد</h2>
+<textarea id="questionText" placeholder="اكتب السؤال هنا..."></textarea>
 <div id="answersBox"></div>
-
-<button class="btn btn-secondary" onclick="saveQuestion()">حفظ السؤال</button>
-<button class="btn btn-light" onclick="clearQuestionForm()">مسح النموذج</button>
+<button class="btn gray" onclick="addAnswerInput()">+ إجابة</button>
+<button class="btn gold" onclick="saveQuestion()">💾 حفظ في البنك</button>
 </div>
 
-<div class="card">
-<h3>الأسئلة المحفوظة</h3>
-<div id="questionsList" class="helper">لا توجد أسئلة حتى الآن</div>
+<div id="questionsList"></div>
 </div>
-
+</section>
+<section id="tvModal" class="modal hidden">
+<div class="modalBox">
+<h2>شاشة التلفزيون</h2>
+<div class="qr">▦</div>
+<p class="sub">امسح QR لفتح شاشة العرض</p>
+<button class="btn gold" onclick="hideTvModal()">إغلاق</button>
 </div>
-
-<div id="toolsTab" class="tabPage">
-
-<div class="card">
-<h3>استيراد ملف أسئلة</h3>
-<div class="helper">صيغة الملف يجب أن تكون JSON.</div>
-<input class="file-input" type="file" accept=".json" onchange="importQuestions(event)">
-</div>
-
-<div class="card">
-<h3>تصدير الأسئلة</h3>
-<button class="btn btn-secondary" onclick="exportQuestions()">تحميل نسخة الأسئلة</button>
-</div>
-
-</div>
-
-<div id="playTab" class="tabPage">
-
-<div class="card">
-<h3>شاشة اللعب</h3>
-<div class="helper">هذه الصفحة مؤقتة. في المرحلة القادمة سنضيف اختيار السؤال، كشف الإجابات، النقاط، والمؤقت.</div>
-<button class="btn btn-primary" onclick="alert('سنبدأ بناء شاشة اللعب في المرحلة القادمة')">بدء التجهيز للعب</button>
-</div>
-
-</div>
-
-</div>
-
-</div>
+</section>
 
 <script>
-const SESSION_KEY="familyFeudLogin";
-const ROOM_KEY="familyFeudRoom";
-const SESSION_HOURS=3;
+const SESSION_KEY="ff_session";
+const ROOM_KEY="ff_room";
+const QUESTIONS_KEY="ff_questions";
+let timerValue=10, scoreA=0, scoreB=0, currentQuestion=null, currentIndex=null, roundPoints=0;
 
-function checkSession(){
-const saved=localStorage.getItem(SESSION_KEY);
-if(!saved)return;
-const data=JSON.parse(saved);
-const now=new Date().getTime();
-
-if(now < data.expiresAt){
-const room=localStorage.getItem(ROOM_KEY);
-if(room){showHost(JSON.parse(room));}
-else{showHome();}
-}else{
-localStorage.removeItem(SESSION_KEY);
-}
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 }
 
 function login(){
-const user=document.getElementById("username").value.trim().toLowerCase();
-const pass=document.getElementById("password").value;
-
-if(user==="a7_ib" && pass==="Admin@123"){
-const expiresAt=new Date().getTime()+(SESSION_HOURS*60*60*1000);
-localStorage.setItem(SESSION_KEY,JSON.stringify({loggedIn:true,expiresAt}));
-showHome();
-}else{
-document.getElementById("errorMsg").style.display="block";
-}
+let u=document.getElementById("username").value.trim().toLowerCase();
+let p=document.getElementById("password").value;
+if(u==="a7_ib"&&p==="Admin@123"){
+localStorage.setItem(SESSION_KEY,Date.now()+3*60*60*1000);
+showPage("settingsPage");
+}else document.getElementById("loginError").classList.remove("hidden");
 }
 
-function showHome(){
-document.getElementById("loginPage").classList.add("hidden");
-document.getElementById("homePage").classList.remove("hidden");
-document.getElementById("hostPage").classList.add("hidden");
+function logout(){localStorage.removeItem(SESSION_KEY);location.reload()}
+function updateTargetLabel(){
+let m=document.getElementById("winMode").value;
+document.getElementById("targetLabel").innerText=m==="points"?"النقاط المستهدفة":"عدد الجولات";
 }
-
-function logout(){
-localStorage.removeItem(SESSION_KEY);
-location.reload();
+function setTimer(v,btn){
+timerValue=v;
+document.querySelectorAll(".timerPick").forEach(b=>b.style.borderColor="#344056");
+btn.style.borderColor="var(--gold)";
 }
-
-function updateWinMode(){
-const winMode=document.getElementById("winMode").value;
-const label=document.getElementById("targetLabel");
-const input=document.getElementById("targetValue");
-
-if(winMode==="points"){
-label.innerText="قيمة النقاط المستهدفة";
-input.type="text";
-input.value="100";
-input.placeholder="مثال: 100 أو 1,000";
-}else{
-label.innerText="عدد الجولات";
-input.type="number";
-input.value="5";
-input.placeholder="من 1 إلى 15";
-}
-}
-
-function formatNumber(value){
-const clean=value.toString().replace(/,/g,"").replace(/[^\d]/g,"");
-if(clean==="")return "";
-return Number(clean).toLocaleString("en-US");
-}
-
-document.addEventListener("input",function(e){
-if(e.target.id==="targetValue" && document.getElementById("winMode").value==="points"){
-e.target.value=formatNumber(e.target.value);
-}
-});
-
-function createRoom(){
-const winMode=document.getElementById("winMode").value;
-let targetValue=document.getElementById("targetValue").value;
-
-if(winMode==="rounds"){
-const rounds=Number(targetValue);
-if(!rounds || rounds < 1 || rounds > 15){
-alert("عدد الجولات يجب أن يكون بين 1 و 15");
-return;
-}
-}
-
-const room={
-code:"FF-"+Math.floor(1000+Math.random()*9000),
-roomName:document.getElementById("roomName").value || "غرفة بدون اسم",
-team1:document.getElementById("team1").value || "الفريق الأول",
-team2:document.getElementById("team2").value || "الفريق الثاني",
-winMode,
-targetValue,
-timer:document.getElementById("timer").value || 10,
-questions:[]
-};
-
+function saveSettings(){
+let mode=document.getElementById("winMode").value;
+let target=document.getElementById("targetValue").value;
+if(mode==="rounds"&&(Number(target)<1||Number(target)>15)){alert("عدد الجولات من 1 إلى 15");return}
+let room={team1:team1.value||"عائلة أ",team2:team2.value||"عائلة ب",mode,target,timer:timerValue,code:"FF-"+Math.floor(1000+Math.random()*9000)};
 localStorage.setItem(ROOM_KEY,JSON.stringify(room));
-showHost(room);
+loadLobby();
 }
-
-function showHost(room){
-document.getElementById("loginPage").classList.add("hidden");
-document.getElementById("homePage").classList.add("hidden");
-document.getElementById("hostPage").classList.remove("hidden");
-
-document.getElementById("roomMiniCode").innerText=room.code;
-
-const winText=room.winMode==="points" ? "نقاط مستهدفة" : "عدد جولات";
-
-document.getElementById("roomInfo").innerHTML=`
-<b>الغرفة:</b> ${room.roomName}<br>
-<b>الفريق الأول:</b> ${room.team1}<br>
-<b>الفريق الثاني:</b> ${room.team2}<br>
-<b>طريقة الفوز:</b> ${winText}<br>
-<b>الهدف:</b> ${room.targetValue}<br>
-<b>المؤقت الأساسي:</b> ${room.timer} ثواني
-`;
-
-buildAnswerInputs();
-renderQuestions(room);
+function loadLobby(){
+let r=JSON.parse(localStorage.getItem(ROOM_KEY));
+teamAName.innerText=r.team1;teamBName.innerText=r.team2;roomLabel.innerText="معلومات الغرفة "+r.code;
+showPage("lobbyPage");
 }
-
-function openTab(id,btn){
-document.querySelectorAll(".tabPage").forEach(x=>x.classList.remove("active"));
-document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-btn.classList.add("active");
-}
-
+function toggleMenu(){menuPanel.classList.toggle("hidden")}
+function showLobby(){showPage("lobbyPage");menuPanel.classList.add("hidden");renderLobbyState()}
+function goSettingsFromMenu(){showPage("settingsPage");menuPanel.classList.add("hidden")}
+function showTvModal(){tvModal.classList.remove("hidden")}
+function hideTvModal(){tvModal.classList.add("hidden")}
+function changeScore(t,v){if(t==="a"){scoreA=Math.max(0,scoreA+v);scoreAEl()}else{scoreB=Math.max(0,scoreB+v);scoreBEl()}}
+function scoreAEl(){document.getElementById("scoreA").innerText=scoreA}
+function scoreBEl(){document.getElementById("scoreB").innerText=scoreB}
+function getQuestions(){return JSON.parse(localStorage.getItem(QUESTIONS_KEY)||"[]")}
+function setQuestions(q){localStorage.setItem(QUESTIONS_KEY,JSON.stringify(q))}
+function showQuestionBank(){showPage("bankPage");menuPanel.classList.add("hidden");buildAnswerInputs();renderQuestions()}
 function buildAnswerInputs(){
-let html="";
-for(let i=1;i<=6;i++){
-html+=`
-<label>الإجابة ${i}</label>
-<div class="answer-row">
-<input id="answer${i}" placeholder="الإجابة">
-<input id="points${i}" type="number" placeholder="نقاط">
-</div>
-`;
+let h="";
+for(let i=1;i<=6;i++)h+=`<label>الإجابة ${i}</label><div class="answerRow"><input id="ans${i}" placeholder="الإجابة"><input id="pts${i}" type="number" placeholder="نقاط"></div>`;
+answersBox.innerHTML=h;
 }
-document.getElementById("answersBox").innerHTML=html;
-}
-
+function addAnswerInput(){}
 function saveQuestion(){
-const room=JSON.parse(localStorage.getItem(ROOM_KEY));
-const question=document.getElementById("questionText").value.trim();
-
-if(!question){
-alert("اكتب السؤال أولاً");
-return;
+let q=questionText.value.trim();if(!q){alert("اكتب السؤال");return}
+let answers=[];
+for(let i=1;i<=6;i++){let a=document.getElementById("ans"+i).value.trim();let p=Number(document.getElementById("pts"+i).value)||0;if(a)answers.push({text:a,points:p})}
+if(!answers.length){alert("أضف إجابة واحدة على الأقل");return}
+let all=getQuestions();all.push({question:q,answers});setQuestions(all);questionText.value="";buildAnswerInputs();renderQuestions();
 }
-
-const answers=[];
-for(let i=1;i<=6;i++){
-const text=document.getElementById("answer"+i).value.trim();
-const points=document.getElementById("points"+i).value;
-if(text){
-answers.push({text,points:Number(points)||0});
+function renderQuestions(){
+let all=getQuestions();questionCount.innerText=all.length+" سؤال";
+questionsList.innerHTML=all.map((q,i)=>`<div class="questionItem"><b>${i+1}. ${q.question}</b><br><small>${q.answers.length} إجابات</small><button class="btn red" onclick="deleteQuestion(${i})">حذف</button></div>`).join("")||"<p class='sub'>لا توجد أسئلة</p>";
 }
+function deleteQuestion(i){let q=getQuestions();q.splice(i,1);setQuestions(q);renderQuestions()}
+function clearAllQuestions(){if(confirm("حذف كل الأسئلة؟")){setQuestions([]);renderQuestions()}}
+function importQuestions(e){
+let f=e.target.files[0];if(!f)return;
+let r=new FileReader();
+r.onload=x=>{try{let arr=JSON.parse(x.target.result);setQuestions(getQuestions().concat(arr));renderQuestions()}catch{alert("ملف غير صحيح")}};
+r.readAsText(f);
 }
-
-if(answers.length===0){
-alert("أضف إجابة واحدة على الأقل");
-return;
+function previewRandomQuestion(){
+let qs=getQuestions();if(!qs.length){alert("أضف أسئلة أولاً");return}
+currentIndex=Math.floor(Math.random()*qs.length);currentQuestion=qs[currentIndex];
+lobbyEmpty.classList.add("hidden");playBox.classList.add("hidden");previewBox.classList.remove("hidden");
+previewBox.innerHTML=`<div class="previewCard"><div class="previewQ">${currentQuestion.question}</div>${currentQuestion.answers.map(a=>`<div class="previewAns"><span>${a.text}</span><b>${a.points}</b></div>`).join("")}<button class="btn gold" onclick="startRound()">بدء الجولة</button><button class="btn gray" onclick="previewRandomQuestion()">تخطي - سؤال آخر</button></div>`;
 }
-
-room.questions.push({question,answers});
-localStorage.setItem(ROOM_KEY,JSON.stringify(room));
-clearQuestionForm();
-renderQuestions(room);
+function startRound(){
+roundPoints=0;previewBox.classList.add("hidden");playBox.classList.remove("hidden");
+playBox.innerHTML=`<div class="previewCard"><div class="previewQ">${currentQuestion.question}</div>${[1,2,3,4,5,6].map((n,i)=>{let a=currentQuestion.answers[i];return `<div class="playAnswer ${!a?'hiddenSlot':''}" onclick="revealAnswer(this,${a?a.points:0})"><span>${n}. ${a?a.text:"إجابة فارغة"}</span><b>${a?a.points:"-"}</b></div>`}).join("")}<div class="bottomControls"><button class="btn gray" onclick="previewRandomQuestion()">السؤال التالي بدون حفظ نقاط الجولة</button><button class="btn blue" onclick="awardRound('a')">اعتماد النقاط لـ ${teamAName.innerText}</button><button class="btn blue" onclick="awardRound('b')">اعتماد النقاط لـ ${teamBName.innerText}</button></div></div>`;
 }
+function revealAnswer(el,p){if(el.classList.contains("revealed"))return;el.classList.add("revealed");roundPoints+=p}
+function awardRound(t){if(t==="a"){scoreA+=roundPoints;scoreAEl()}else{scoreB+=roundPoints;scoreBEl()}roundPoints=0;previewRandomQuestion()}
+function newRound(){scoreA=0;scoreB=0;scoreAEl();scoreBEl();lobbyEmpty.classList.remove("hidden");previewBox.classList.add("hidden");playBox.classList.add("hidden");menuPanel.classList.add("hidden")}
+function renderLobbyState(){}
 
-function clearQuestionForm(){
-document.getElementById("questionText").value="";
-for(let i=1;i<=6;i++){
-document.getElementById("answer"+i).value="";
-document.getElementById("points"+i).value="";
-}
-}
-
-function renderQuestions(room){
-const box=document.getElementById("questionsList");
-
-if(!room.questions || room.questions.length===0){
-box.innerHTML="لا توجد أسئلة حتى الآن";
-return;
-}
-
-let html="";
-room.questions.forEach((q,index)=>{
-html+=`
-<div class="question-item">
-<b>${index+1}. ${q.question}</b>
-<ul style="margin-top:8px;padding-right:20px">
-${q.answers.map(a=>`<li>${a.text} - ${a.points} نقطة</li>`).join("")}
-</ul>
-<button class="btn btn-danger" onclick="deleteQuestion(${index})">حذف السؤال</button>
-</div>
-`;
-});
-
-box.innerHTML=html;
-}
-
-function deleteQuestion(index){
-const room=JSON.parse(localStorage.getItem(ROOM_KEY));
-room.questions.splice(index,1);
-localStorage.setItem(ROOM_KEY,JSON.stringify(room));
-renderQuestions(room);
-}
-
-function importQuestions(event){
-const file=event.target.files[0];
-if(!file)return;
-
-const reader=new FileReader();
-reader.onload=function(e){
-try{
-const imported=JSON.parse(e.target.result);
-if(!Array.isArray(imported)){
-alert("ملف غير صحيح");
-return;
-}
-
-const room=JSON.parse(localStorage.getItem(ROOM_KEY));
-room.questions=room.questions.concat(imported);
-localStorage.setItem(ROOM_KEY,JSON.stringify(room));
-renderQuestions(room);
-alert("تم استيراد الأسئلة بنجاح");
-}catch{
-alert("تعذر قراءة الملف");
-}
-};
-reader.readAsText(file);
-}
-
-function exportQuestions(){
-const room=JSON.parse(localStorage.getItem(ROOM_KEY));
-const data=JSON.stringify(room.questions || [],null,2);
-const blob=new Blob([data],{type:"application/json"});
-const url=URL.createObjectURL(blob);
-
-const a=document.createElement("a");
-a.href=url;
-a.download="family-feud-questions.json";
-a.click();
-
-URL.revokeObjectURL(url);
-}
-
-function resetRoom(){
-if(confirm("هل تريد حذف الغرفة الحالية؟")){
-localStorage.removeItem(ROOM_KEY);
-location.reload();
-}
-}
-
-checkSession();
+(function init(){
+let exp=Number(localStorage.getItem(SESSION_KEY)||0);
+if(exp>Date.now()){localStorage.getItem(ROOM_KEY)?loadLobby():showPage("settingsPage")}
+})();
 </script>
 
 </body>
