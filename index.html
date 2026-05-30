@@ -7,15 +7,18 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+
 body{
 background:linear-gradient(135deg,#0f172a,#1e3a8a);
 min-height:100vh;
 padding:20px;
 color:white;
 }
+
 .container{width:100%;max-width:460px;margin:auto;padding-top:60px}
 .logo{text-align:center;font-size:38px;font-weight:bold;margin-bottom:12px}
 .subtitle{text-align:center;font-size:17px;opacity:.85;margin-bottom:25px}
+
 .card{
 background:rgba(255,255,255,.08);
 backdrop-filter:blur(12px);
@@ -24,7 +27,9 @@ padding:22px;
 border:1px solid rgba(255,255,255,.15);
 margin-bottom:16px;
 }
+
 label{display:block;margin-top:14px;margin-bottom:6px;font-weight:bold}
+
 input,select{
 width:100%;
 padding:15px;
@@ -33,6 +38,12 @@ border-radius:14px;
 font-size:16px;
 outline:none;
 }
+
+.login-input{
+margin-top:12px;
+background:white;
+}
+
 .btn{
 width:100%;
 padding:16px;
@@ -43,12 +54,19 @@ font-weight:bold;
 margin-top:14px;
 cursor:pointer;
 }
+
 .btn-primary{background:#f59e0b;color:white}
 .btn-secondary{background:#2563eb;color:white}
-.btn-danger{background:#dc2626;color:white}
 .error{color:#fecaca;margin-top:12px;font-size:14px;display:none;text-align:center}
 .hidden{display:none}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
 .small-btn{
 padding:10px 14px;
 border:none;
@@ -57,6 +75,14 @@ background:#dc2626;
 color:white;
 font-weight:bold;
 }
+
+.helper{
+font-size:12px;
+opacity:.75;
+margin-top:6px;
+line-height:1.5;
+}
+
 .result{
 background:rgba(0,0,0,.25);
 border-radius:18px;
@@ -65,6 +91,7 @@ margin-top:16px;
 line-height:1.8;
 display:none;
 }
+
 .version{text-align:center;margin-top:20px;font-size:12px;opacity:.6}
 </style>
 </head>
@@ -78,8 +105,8 @@ display:none;
 <div class="subtitle">تسجيل الدخول للعبة</div>
 
 <div class="card">
-<input id="username" type="text" placeholder="Username">
-<input id="password" type="password" placeholder="Password">
+<input id="username" class="login-input" type="text" placeholder="Username">
+<input id="password" class="login-input" type="password" placeholder="Password">
 
 <button class="btn btn-primary" onclick="login()">دخول</button>
 
@@ -106,9 +133,6 @@ display:none;
 <label>اسم الغرفة</label>
 <input id="roomName" placeholder="مثال: تحدي العائلة">
 
-<label>اسم المضيف</label>
-<input id="hostName" placeholder="اسم مدير اللعبة">
-
 <label>اسم الفريق الأول</label>
 <input id="team1" placeholder="الفريق الأزرق">
 
@@ -116,16 +140,17 @@ display:none;
 <input id="team2" placeholder="الفريق الذهبي">
 
 <label>طريقة الفوز</label>
-<select id="winMode">
+<select id="winMode" onchange="updateWinMode()">
 <option value="points">عدد نقاط مستهدف</option>
 <option value="rounds">عدد جولات</option>
 </select>
 
-<label>القيمة المستهدفة</label>
-<input id="targetValue" type="number" value="100" placeholder="مثال: 100 نقطة أو 5 جولات">
+<label id="targetLabel">قيمة النقاط المستهدفة</label>
+<input id="targetValue" type="text" inputmode="numeric" value="100" placeholder="مثال: 100 أو 1,000">
 
 <label>المؤقت الأساسي للإجابة بالثواني</label>
 <input id="timer" type="number" value="10">
+<div class="helper">يمكن تغييره أثناء اللعب لكل سؤال أو جولة.</div>
 
 <button class="btn btn-primary" onclick="createRoom()">
 إنشاء الغرفة
@@ -180,16 +205,54 @@ localStorage.removeItem(SESSION_KEY);
 location.reload();
 }
 
+function updateWinMode(){
+const winMode=document.getElementById("winMode").value;
+const label=document.getElementById("targetLabel");
+const input=document.getElementById("targetValue");
+
+if(winMode==="points"){
+label.innerText="قيمة النقاط المستهدفة";
+input.type="text";
+input.inputMode="numeric";
+input.value="100";
+input.placeholder="مثال: 100 أو 1,000";
+}else{
+label.innerText="عدد الجولات";
+input.type="number";
+input.value="5";
+input.placeholder="من 1 إلى 15";
+}
+}
+
+function formatNumber(value){
+const clean=value.toString().replace(/,/g,"").replace(/[^\d]/g,"");
+if(clean==="")return "";
+return Number(clean).toLocaleString("en-US");
+}
+
+document.addEventListener("input",function(e){
+if(e.target.id==="targetValue" && document.getElementById("winMode").value==="points"){
+e.target.value=formatNumber(e.target.value);
+}
+});
+
 function createRoom(){
 const roomCode="FF-"+Math.floor(1000+Math.random()*9000);
 
 const roomName=document.getElementById("roomName").value || "غرفة بدون اسم";
-const hostName=document.getElementById("hostName").value || "المضيف";
 const team1=document.getElementById("team1").value || "الفريق الأول";
 const team2=document.getElementById("team2").value || "الفريق الثاني";
 const winMode=document.getElementById("winMode").value;
-const targetValue=document.getElementById("targetValue").value;
+let targetValue=document.getElementById("targetValue").value;
 const timer=document.getElementById("timer").value || 10;
+
+if(winMode==="rounds"){
+const rounds=Number(targetValue);
+if(!rounds || rounds < 1 || rounds > 15){
+alert("عدد الجولات يجب أن يكون بين 1 و 15");
+return;
+}
+}
 
 const winText=winMode==="points" ? "نقاط مستهدفة" : "عدد جولات";
 
@@ -199,12 +262,11 @@ result.innerHTML=`
 <h3>✅ تم إنشاء الغرفة</h3>
 <p><b>كود الغرفة:</b> ${roomCode}</p>
 <p><b>اسم الغرفة:</b> ${roomName}</p>
-<p><b>المضيف:</b> ${hostName}</p>
 <p><b>الفريق الأول:</b> ${team1}</p>
 <p><b>الفريق الثاني:</b> ${team2}</p>
 <p><b>طريقة الفوز:</b> ${winText}</p>
 <p><b>القيمة:</b> ${targetValue}</p>
-<p><b>المؤقت:</b> ${timer} ثواني</p>
+<p><b>المؤقت الأساسي:</b> ${timer} ثواني</p>
 <p>لاحقًا سنضيف باركود دخول اللاعبين وشاشة العرض.</p>
 `;
 }
