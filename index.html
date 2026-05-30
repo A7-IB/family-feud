@@ -7,91 +7,28 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
-
-body{
-background:linear-gradient(135deg,#0f172a,#1e3a8a);
-min-height:100vh;
-padding:20px;
-color:white;
-}
-
-.container{width:100%;max-width:460px;margin:auto;padding-top:60px}
-.logo{text-align:center;font-size:38px;font-weight:bold;margin-bottom:12px}
-.subtitle{text-align:center;font-size:17px;opacity:.85;margin-bottom:25px}
-
-.card{
-background:rgba(255,255,255,.08);
-backdrop-filter:blur(12px);
-border-radius:24px;
-padding:22px;
-border:1px solid rgba(255,255,255,.15);
-margin-bottom:16px;
-}
-
+body{background:linear-gradient(135deg,#0f172a,#1e3a8a);min-height:100vh;padding:20px;color:white}
+.container{width:100%;max-width:520px;margin:auto;padding-top:35px}
+.logo{text-align:center;font-size:34px;font-weight:bold;margin-bottom:10px}
+.subtitle{text-align:center;font-size:16px;opacity:.85;margin-bottom:22px}
+.card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border-radius:24px;padding:20px;border:1px solid rgba(255,255,255,.15);margin-bottom:16px}
 label{display:block;margin-top:14px;margin-bottom:6px;font-weight:bold}
-
-input,select{
-width:100%;
-padding:15px;
-border:none;
-border-radius:14px;
-font-size:16px;
-outline:none;
-}
-
-.login-input{
-margin-top:12px;
-background:white;
-}
-
-.btn{
-width:100%;
-padding:16px;
-border:none;
-border-radius:14px;
-font-size:18px;
-font-weight:bold;
-margin-top:14px;
-cursor:pointer;
-}
-
+input,select,textarea{width:100%;padding:14px;border:none;border-radius:14px;font-size:16px;outline:none}
+textarea{min-height:90px;resize:vertical}
+.login-input{margin-top:12px;background:white}
+.btn{width:100%;padding:15px;border:none;border-radius:14px;font-size:17px;font-weight:bold;margin-top:14px;cursor:pointer}
 .btn-primary{background:#f59e0b;color:white}
 .btn-secondary{background:#2563eb;color:white}
+.btn-danger{background:#dc2626;color:white}
+.btn-light{background:white;color:#1e3a8a}
 .error{color:#fecaca;margin-top:12px;font-size:14px;display:none;text-align:center}
 .hidden{display:none}
-
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-}
-
-.small-btn{
-padding:10px 14px;
-border:none;
-border-radius:12px;
-background:#dc2626;
-color:white;
-font-weight:bold;
-}
-
-.helper{
-font-size:12px;
-opacity:.75;
-margin-top:6px;
-line-height:1.5;
-}
-
-.result{
-background:rgba(0,0,0,.25);
-border-radius:18px;
-padding:16px;
-margin-top:16px;
-line-height:1.8;
-display:none;
-}
-
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:10px}
+.small-btn{padding:9px 12px;border:none;border-radius:12px;background:#dc2626;color:white;font-weight:bold}
+.helper{font-size:12px;opacity:.75;margin-top:6px;line-height:1.5}
+.info{background:rgba(0,0,0,.22);border-radius:18px;padding:14px;line-height:1.8;margin-bottom:14px}
+.question-item{background:rgba(255,255,255,.1);border-radius:16px;padding:14px;margin-top:12px}
+.answer-row{display:grid;grid-template-columns:1fr 90px;gap:8px;margin-top:10px}
 .version{text-align:center;margin-top:20px;font-size:12px;opacity:.6}
 </style>
 </head>
@@ -107,12 +44,8 @@ display:none;
 <div class="card">
 <input id="username" class="login-input" type="text" placeholder="Username">
 <input id="password" class="login-input" type="password" placeholder="Password">
-
 <button class="btn btn-primary" onclick="login()">دخول</button>
-
-<div id="errorMsg" class="error">
-اسم المستخدم أو كلمة المرور غير صحيحة
-</div>
+<div id="errorMsg" class="error">اسم المستخدم أو كلمة المرور غير صحيحة</div>
 </div>
 
 <div class="version">Session valid for 3 hours</div>
@@ -152,13 +85,41 @@ display:none;
 <input id="timer" type="number" value="10">
 <div class="helper">يمكن تغييره أثناء اللعب لكل سؤال أو جولة.</div>
 
-<button class="btn btn-primary" onclick="createRoom()">
-إنشاء الغرفة
-</button>
+<button class="btn btn-primary" onclick="createRoom()">إنشاء الغرفة</button>
 
 </div>
+</div>
 
-<div id="roomResult" class="result"></div>
+<div id="controlPage" class="hidden">
+
+<div class="topbar">
+<div>
+<strong>لوحة إدارة الغرفة</strong><br>
+<small id="roomMiniCode"></small>
+</div>
+<button class="small-btn" onclick="logout()">تسجيل خروج</button>
+</div>
+
+<div id="roomInfo" class="info"></div>
+
+<div class="card">
+<h3>إضافة سؤال</h3>
+
+<label>السؤال</label>
+<textarea id="questionText" placeholder="اكتب السؤال هنا"></textarea>
+
+<div id="answersBox"></div>
+
+<button class="btn btn-secondary" onclick="saveQuestion()">حفظ السؤال</button>
+<button class="btn btn-light" onclick="clearQuestionForm()">مسح النموذج</button>
+</div>
+
+<div class="card">
+<h3>الأسئلة المحفوظة</h3>
+<div id="questionsList" class="helper">لا توجد أسئلة حتى الآن</div>
+</div>
+
+<button class="btn btn-danger" onclick="resetRoom()">حذف الغرفة والبدء من جديد</button>
 
 </div>
 
@@ -166,17 +127,18 @@ display:none;
 
 <script>
 const SESSION_KEY="familyFeudLogin";
+const ROOM_KEY="familyFeudRoom";
 const SESSION_HOURS=3;
 
 function checkSession(){
 const saved=localStorage.getItem(SESSION_KEY);
 if(!saved)return;
-
 const data=JSON.parse(saved);
 const now=new Date().getTime();
-
 if(now < data.expiresAt){
-showHome();
+const room=localStorage.getItem(ROOM_KEY);
+if(room){showControl(JSON.parse(room));}
+else{showHome();}
 }else{
 localStorage.removeItem(SESSION_KEY);
 }
@@ -185,7 +147,6 @@ localStorage.removeItem(SESSION_KEY);
 function login(){
 const user=document.getElementById("username").value.trim().toLowerCase();
 const pass=document.getElementById("password").value;
-
 if(user==="a7_ib" && pass==="Admin@123"){
 const expiresAt=new Date().getTime()+(SESSION_HOURS*60*60*1000);
 localStorage.setItem(SESSION_KEY,JSON.stringify({loggedIn:true,expiresAt}));
@@ -198,6 +159,7 @@ document.getElementById("errorMsg").style.display="block";
 function showHome(){
 document.getElementById("loginPage").classList.add("hidden");
 document.getElementById("homePage").classList.remove("hidden");
+document.getElementById("controlPage").classList.add("hidden");
 }
 
 function logout(){
@@ -213,7 +175,6 @@ const input=document.getElementById("targetValue");
 if(winMode==="points"){
 label.innerText="قيمة النقاط المستهدفة";
 input.type="text";
-input.inputMode="numeric";
 input.value="100";
 input.placeholder="مثال: 100 أو 1,000";
 }else{
@@ -237,14 +198,8 @@ e.target.value=formatNumber(e.target.value);
 });
 
 function createRoom(){
-const roomCode="FF-"+Math.floor(1000+Math.random()*9000);
-
-const roomName=document.getElementById("roomName").value || "غرفة بدون اسم";
-const team1=document.getElementById("team1").value || "الفريق الأول";
-const team2=document.getElementById("team2").value || "الفريق الثاني";
 const winMode=document.getElementById("winMode").value;
 let targetValue=document.getElementById("targetValue").value;
-const timer=document.getElementById("timer").value || 10;
 
 if(winMode==="rounds"){
 const rounds=Number(targetValue);
@@ -254,21 +209,122 @@ return;
 }
 }
 
-const winText=winMode==="points" ? "نقاط مستهدفة" : "عدد جولات";
+const room={
+code:"FF-"+Math.floor(1000+Math.random()*9000),
+roomName:document.getElementById("roomName").value || "غرفة بدون اسم",
+team1:document.getElementById("team1").value || "الفريق الأول",
+team2:document.getElementById("team2").value || "الفريق الثاني",
+winMode,
+targetValue,
+timer:document.getElementById("timer").value || 10,
+questions:[]
+};
 
-const result=document.getElementById("roomResult");
-result.style.display="block";
-result.innerHTML=`
-<h3>✅ تم إنشاء الغرفة</h3>
-<p><b>كود الغرفة:</b> ${roomCode}</p>
-<p><b>اسم الغرفة:</b> ${roomName}</p>
-<p><b>الفريق الأول:</b> ${team1}</p>
-<p><b>الفريق الثاني:</b> ${team2}</p>
-<p><b>طريقة الفوز:</b> ${winText}</p>
-<p><b>القيمة:</b> ${targetValue}</p>
-<p><b>المؤقت الأساسي:</b> ${timer} ثواني</p>
-<p>لاحقًا سنضيف باركود دخول اللاعبين وشاشة العرض.</p>
+localStorage.setItem(ROOM_KEY,JSON.stringify(room));
+showControl(room);
+}
+
+function showControl(room){
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("homePage").classList.add("hidden");
+document.getElementById("controlPage").classList.remove("hidden");
+
+document.getElementById("roomMiniCode").innerText=room.code;
+
+const winText=room.winMode==="points" ? "نقاط مستهدفة" : "عدد جولات";
+
+document.getElementById("roomInfo").innerHTML=`
+<b>الغرفة:</b> ${room.roomName}<br>
+<b>الفريق الأول:</b> ${room.team1}<br>
+<b>الفريق الثاني:</b> ${room.team2}<br>
+<b>طريقة الفوز:</b> ${winText}<br>
+<b>الهدف:</b> ${room.targetValue}<br>
+<b>المؤقت الأساسي:</b> ${room.timer} ثواني
 `;
+
+buildAnswerInputs();
+renderQuestions(room);
+}
+
+function buildAnswerInputs(){
+let html="";
+for(let i=1;i<=5;i++){
+html+=`
+<label>الإجابة ${i}</label>
+<div class="answer-row">
+<input id="answer${i}" placeholder="الإجابة">
+<input id="points${i}" type="number" placeholder="نقاط">
+</div>
+`;
+}
+document.getElementById("answersBox").innerHTML=html;
+}
+
+function saveQuestion(){
+const room=JSON.parse(localStorage.getItem(ROOM_KEY));
+const question=document.getElementById("questionText").value.trim();
+
+if(!question){
+alert("اكتب السؤال أولاً");
+return;
+}
+
+const answers=[];
+for(let i=1;i<=5;i++){
+const text=document.getElementById("answer"+i).value.trim();
+const points=document.getElementById("points"+i).value;
+if(text){
+answers.push({text,points:Number(points)||0});
+}
+}
+
+if(answers.length===0){
+alert("أضف إجابة واحدة على الأقل");
+return;
+}
+
+room.questions.push({question,answers});
+localStorage.setItem(ROOM_KEY,JSON.stringify(room));
+clearQuestionForm();
+renderQuestions(room);
+}
+
+function clearQuestionForm(){
+document.getElementById("questionText").value="";
+for(let i=1;i<=5;i++){
+document.getElementById("answer"+i).value="";
+document.getElementById("points"+i).value="";
+}
+}
+
+function renderQuestions(room){
+const box=document.getElementById("questionsList");
+
+if(!room.questions || room.questions.length===0){
+box.innerHTML="لا توجد أسئلة حتى الآن";
+return;
+}
+
+let html="";
+room.questions.forEach((q,index)=>{
+html+=`
+<div class="question-item">
+<b>${index+1}. ${q.question}</b>
+<ul style="margin-top:8px;padding-right:20px">
+${q.answers.map(a=>`<li>${a.text} - ${a.points} نقطة</li>`).join("")}
+</ul>
+</div>
+`;
+});
+
+box.innerHTML=html;
+}
+
+function resetRoom(){
+if(confirm("هل تريد حذف الغرفة الحالية؟")){
+localStorage.removeItem(ROOM_KEY);
+location.reload();
+}
 }
 
 checkSession();
