@@ -4,69 +4,543 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AH Family Feud</title>
+
 <style>
 :root{
---bg:#071226;--panel:#121b31;--panel2:#1a2438;--line:#344056;
---gold:#e8bb3f;--blue:#2f80ff;--red:#ef5b73;--green:#22c55e;
---text:#fff;--muted:#9aa4b8;
+--bg:#071226;
+--panel:#121b31;
+--panel2:#1a2438;
+--line:#344056;
+--gold:#e8bb3f;
+--blue:#2f80ff;
+--red:#ef5b73;
+--green:#22c55e;
+--text:#ffffff;
+--muted:#9aa4b8;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{background:radial-gradient(circle at top,#111946 0%,#071226 45%,#020617 100%);color:white;min-height:100vh}
-.page{display:none;min-height:100vh;padding:22px}.page.active{display:block}
-.container{max-width:560px;margin:auto}
-.card{background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:24px;padding:20px;margin-bottom:18px}
-input,select,textarea{width:100%;padding:15px;border-radius:14px;border:1px solid #3a465e;background:#222b3d;color:white;font-size:16px;outline:none}
-textarea{min-height:95px;resize:vertical}
-label{display:block;margin:16px 0 7px;font-weight:800;color:#d7dbea}
-.btn{width:100%;border:0;border-radius:16px;padding:16px;margin-top:14px;font-size:18px;font-weight:900;cursor:pointer}
-.gold{background:var(--gold);color:#111827}.blue{background:#1d4ed8;color:white}.red{background:#7f1d2d;color:#ffb4c0;border:1px solid #ef5b7355}
-.gray{background:#263044;color:white;border:1px solid #46536d}.green{background:#166534;color:#bbf7d0;border:1px solid #22c55e66}
-.hidden{display:none!important}.version{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
-.logo{text-align:center;margin:45px 0 15px;font-size:34px;font-weight:900;color:var(--gold);text-shadow:0 0 20px #e8bb3f66}
-.sub{text-align:center;color:var(--muted);margin-bottom:28px;font-size:17px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
-.iconBtn{width:50px;height:50px;border-radius:16px;background:#20283a;border:1px solid #3b455c;color:white;font-size:24px}
-.pill{padding:10px 18px;border-radius:18px;background:#1c2638;border:1px solid #34415a;color:#b8c2d8}
-.teamBar{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 18px}
-.teamScore{border-radius:18px;padding:12px;border:1px solid}
-.teamA{background:#08213f;border-color:#1d4ed8;color:#67a6ff}.teamB{background:#321927;border-color:#ef5b73;color:#ff8fa0}
-.scoreRow{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.scoreBtns{display:flex;align-items:center;gap:8px}
-.mini{width:38px;height:38px;border-radius:12px;border:0;background:#30384b;color:white;font-size:22px;font-weight:900}
-.scoreNum{font-size:28px;color:var(--gold);font-weight:900}
-.centerEmpty{min-height:380px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--muted)}
-.bigIcon{font-size:52px;color:#6b5b2d;margin-bottom:20px}
-.menuPanel{position:fixed;top:125px;right:0;left:0;background:#101447;border-bottom-left-radius:26px;border-bottom-right-radius:26px;border:1px solid #29327a;padding:26px;z-index:20;box-shadow:0 20px 70px #0008}
-.menuItem{display:flex;align-items:center;gap:14px;padding:17px 6px;color:white}
-.menuItem span{font-size:28px;width:36px;text-align:center;color:#7aa7ff}.menuItem b{font-size:21px}.menuItem small{display:block;color:#9aa4b8;margin-top:5px}
-.sep{height:1px;background:#2b335d;margin:12px 0}
-.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}
-.modalBox{background:#11164f;border:1px solid #354091;border-radius:26px;padding:24px;width:100%;max-width:430px;text-align:center}
-.qr{width:230px;height:230px;background:white;margin:20px auto;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#000;font-size:88px}
-.answerRow{display:grid;grid-template-columns:1fr 90px;gap:8px;margin-top:10px}
-.questionItem{background:#172035;border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:12px}
-.previewCard{border:1px solid #6b5b2d;border-radius:26px;padding:24px;background:#171f31;margin-top:18px}
-.previewQ{font-size:26px;font-weight:900;text-align:center;margin:15px 0}
-.previewAns{display:flex;justify-content:space-between;align-items:center;background:#242c3c;border:1px solid #4a5367;border-radius:16px;padding:14px 18px;margin-top:10px;font-size:18px;font-weight:800}
-.playAnswer{display:flex;align-items:center;justify-content:space-between;background:#172035;border:1px solid #344056;border-radius:16px;padding:14px;margin-top:10px;color:#9aa4b8;font-weight:900}
-.playAnswer.revealed{color:white;border-color:#4d5b77;background:#243047}.playAnswer.empty{opacity:.35}
-.bottomControls{position:sticky;bottom:0;background:#081326ee;border-top:1px solid #25334c;padding:14px 0;margin-top:18px}
-.controlGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.smallControl{padding:12px;border-radius:12px;border:1px solid #344056;background:#172035;color:white;font-weight:900}
-.activeTimer{border-color:var(--gold)!important;color:var(--gold)}
-.xOverlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;z-index:80;font-size:180px;color:#ff2748;font-weight:900;text-shadow:0 0 40px #ff2748;animation:popx .8s ease}
-@keyframes popx{0%{transform:scale(.3);opacity:0}50%{transform:scale(1.25);opacity:1}100%{transform:scale(1);opacity:1}}
-.wrongBox{display:flex;gap:8px;justify-content:center;margin-top:10px;font-size:26px;color:#ef5b73}
-.faceoffGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
-.faceCard{border-radius:18px;padding:16px;text-align:center;border:1px solid #344056;background:#141d30;opacity:.35}
-.faceCard.active{opacity:1;border-color:var(--gold);box-shadow:0 0 22px #e8bb3f44}
-.faceTeam{font-size:18px;font-weight:900}.faceRep{font-size:13px;color:var(--muted);margin-top:8px}
-.timerPanel{background:#10182a;border:1px solid #344056;border-radius:18px;padding:14px;margin-top:18px;text-align:center}
-.timerNum{font-size:42px;color:var(--gold);font-weight:900}
-.timerBtns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.rulesCard{background:#171f4c;border:1px solid #354091;border-radius:20px;padding:18px;margin-top:14px;line-height:1.8}
-.rulesCard h3{color:var(--gold);margin-bottom:8px}
-.winnerGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+body{
+background:radial-gradient(circle at top,#111946 0%,#071226 45%,#020617 100%);
+color:white;
+min-height:100vh;
+}
+
+.page{
+display:none;
+min-height:100vh;
+padding:22px;
+}
+
+.page.active{
+display:block;
+}
+
+.container{
+max-width:560px;
+margin:auto;
+}
+
+.card{
+background:rgba(255,255,255,.07);
+border:1px solid var(--line);
+border-radius:24px;
+padding:20px;
+margin-bottom:18px;
+}
+
+input,select,textarea{
+width:100%;
+padding:15px;
+border-radius:14px;
+border:1px solid #3a465e;
+background:#222b3d;
+color:white;
+font-size:16px;
+outline:none;
+}
+
+textarea{
+min-height:95px;
+resize:vertical;
+}
+
+label{
+display:block;
+margin:16px 0 7px;
+font-weight:800;
+color:#d7dbea;
+}
+
+.btn{
+width:100%;
+border:0;
+border-radius:16px;
+padding:16px;
+margin-top:14px;
+font-size:18px;
+font-weight:900;
+cursor:pointer;
+}
+
+.gold{background:var(--gold);color:#111827}
+.blue{background:#1d4ed8;color:white}
+.red{background:#7f1d2d;color:#ffb4c0;border:1px solid #ef5b7355}
+.gray{background:#263044;color:white;border:1px solid #46536d}
+.green{background:#166534;color:#bbf7d0;border:1px solid #22c55e66}
+
+.hidden{
+display:none!important;
+}
+
+.logo{
+text-align:center;
+margin:45px 0 15px;
+font-size:34px;
+font-weight:900;
+color:var(--gold);
+text-shadow:0 0 20px #e8bb3f66;
+}
+
+.sub{
+text-align:center;
+color:var(--muted);
+margin-bottom:28px;
+font-size:17px;
+}
+
+.version{
+text-align:center;
+color:var(--muted);
+font-size:12px;
+margin-top:20px;
+}
+
+.top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin-bottom:18px;
+}
+
+.iconBtn{
+width:50px;
+height:50px;
+border-radius:16px;
+background:#20283a;
+border:1px solid #3b455c;
+color:white;
+font-size:24px;
+}
+
+.pill{
+padding:10px 18px;
+border-radius:18px;
+background:#1c2638;
+border:1px solid #34415a;
+color:#b8c2d8;
+}
+
+.teamBar{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin:12px 0 18px;
+}
+
+.teamScore{
+border-radius:18px;
+padding:12px;
+border:1px solid;
+}
+
+.teamA{
+background:#08213f;
+border-color:#1d4ed8;
+color:#67a6ff;
+}
+
+.teamB{
+background:#321927;
+border-color:#ef5b73;
+color:#ff8fa0;
+}
+
+.scoreRow{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+}
+
+.scoreBtns{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.mini{
+width:38px;
+height:38px;
+border-radius:12px;
+border:0;
+background:#30384b;
+color:white;
+font-size:22px;
+font-weight:900;
+}
+
+.scoreNum{
+font-size:28px;
+color:var(--gold);
+font-weight:900;
+}
+
+.wrongBox{
+display:flex;
+gap:8px;
+justify-content:center;
+margin-top:10px;
+font-size:26px;
+color:#ef5b73;
+}
+
+.centerEmpty{
+min-height:380px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:var(--muted);
+}
+
+.bigIcon{
+font-size:52px;
+color:#6b5b2d;
+margin-bottom:20px;
+}
+
+/* Animated Menu */
+.menuPanel{
+position:fixed;
+top:115px;
+right:0;
+left:0;
+background:#101447;
+border-bottom-left-radius:26px;
+border-bottom-right-radius:26px;
+border:1px solid #29327a;
+padding:26px;
+z-index:20;
+box-shadow:0 20px 70px #0008;
+transform:translateY(-25px);
+opacity:0;
+pointer-events:none;
+transition:.25s ease;
+}
+
+.menuPanel.show{
+transform:translateY(0);
+opacity:1;
+pointer-events:auto;
+}
+
+.menuItem{
+display:flex;
+align-items:center;
+gap:14px;
+padding:17px 6px;
+color:white;
+}
+
+.menuItem span{
+font-size:28px;
+width:36px;
+text-align:center;
+color:#7aa7ff;
+}
+
+.menuItem b{
+font-size:21px;
+}
+
+.menuItem small{
+display:block;
+color:#9aa4b8;
+margin-top:5px;
+}
+
+.sep{
+height:1px;
+background:#2b335d;
+margin:12px 0;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:#000b;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:24px;
+z-index:50;
+}
+
+.modalBox{
+background:#11164f;
+border:1px solid #354091;
+border-radius:26px;
+padding:24px;
+width:100%;
+max-width:430px;
+text-align:center;
+}
+
+.qr{
+width:230px;
+height:230px;
+background:white;
+margin:20px auto;
+border-radius:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#000;
+font-size:88px;
+}
+
+.answerRow{
+display:grid;
+grid-template-columns:1fr 90px;
+gap:8px;
+margin-top:10px;
+}
+
+.questionItem{
+background:#172035;
+border:1px solid var(--line);
+border-radius:18px;
+padding:16px;
+margin-top:12px;
+}
+
+.questionActions{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+margin-top:10px;
+}
+
+.previewCard{
+border:1px solid #6b5b2d;
+border-radius:26px;
+padding:24px;
+background:#171f31;
+margin-top:18px;
+}
+
+.previewQ{
+font-size:26px;
+font-weight:900;
+text-align:center;
+margin:15px 0;
+}
+
+.previewAns{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#242c3c;
+border:1px solid #4a5367;
+border-radius:16px;
+padding:14px 18px;
+margin-top:10px;
+font-size:18px;
+font-weight:800;
+}
+
+.playAnswer{
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:#172035;
+border:1px solid #344056;
+border-radius:16px;
+padding:14px;
+margin-top:10px;
+color:#9aa4b8;
+font-weight:900;
+}
+
+.playAnswer.revealed{
+color:white;
+border-color:#4d5b77;
+background:#243047;
+}
+
+.playAnswer.empty{
+opacity:.35;
+}
+
+.bottomControls{
+position:sticky;
+bottom:0;
+background:#081326ee;
+border-top:1px solid #25334c;
+padding:14px 0;
+margin-top:18px;
+}
+
+.controlGrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+.smallControl{
+padding:12px;
+border-radius:12px;
+border:1px solid #344056;
+background:#172035;
+color:white;
+font-weight:900;
+}
+
+.activeTimer{
+border-color:var(--gold)!important;
+color:var(--gold);
+}
+
+.xOverlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.65);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:80;
+font-size:180px;
+color:#ff2748;
+font-weight:900;
+text-shadow:0 0 40px #ff2748;
+animation:popx .8s ease;
+}
+
+@keyframes popx{
+0%{transform:scale(.3);opacity:0}
+50%{transform:scale(1.25);opacity:1}
+100%{transform:scale(1);opacity:1}
+}
+
+.faceoffGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin:16px 0;
+}
+
+.faceCard{
+border-radius:18px;
+padding:16px;
+text-align:center;
+border:1px solid #344056;
+background:#141d30;
+opacity:.35;
+}
+
+.faceCard.active{
+opacity:1;
+border-color:var(--gold);
+box-shadow:0 0 22px #e8bb3f44;
+}
+
+.faceTeam{
+font-size:20px;
+font-weight:900;
+}
+
+.faceRep{
+font-size:14px;
+color:var(--muted);
+margin-top:8px;
+}
+
+.faceChoice{
+background:#10182a;
+border:1px solid #344056;
+border-radius:18px;
+padding:16px;
+margin-top:14px;
+}
+
+.timerPanel{
+background:#10182a;
+border:1px solid #344056;
+border-radius:18px;
+padding:14px;
+margin-top:18px;
+text-align:center;
+}
+
+.timerNum{
+font-size:42px;
+color:var(--gold);
+font-weight:900;
+}
+
+.timerBtns{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:10px;
+}
+
+.rulesCard{
+background:#171f4c;
+border:1px solid #354091;
+border-radius:20px;
+padding:18px;
+margin-top:14px;
+line-height:1.8;
+}
+
+.rulesCard h3{
+color:var(--gold);
+margin-bottom:8px;
+}
+
+.awardPanel{
+background:#10182a;
+border:1px solid #344056;
+border-radius:18px;
+padding:16px;
+margin-top:16px;
+}
+
+.awardGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.notice{
+background:#172035;
+border:1px solid #344056;
+border-radius:16px;
+padding:14px;
+margin:14px 0;
+color:#d1d5db;
+text-align:center;
+}
 </style>
 </head>
 
@@ -76,20 +550,25 @@ label{display:block;margin:16px 0 7px;font-weight:800;color:#d7dbea}
 <div class="container">
 <div class="logo">AH<br>فاميلي فيود</div>
 <div class="sub">لوحة تحكم المتحكم</div>
+
 <div class="card">
 <label>اسم المستخدم</label>
 <input id="username" dir="ltr" placeholder="User Name">
+
 <label>كلمة المرور</label>
 <input id="password" dir="ltr" type="password" placeholder="••••••">
+
 <button class="btn gold" onclick="login()">دخول ↪</button>
 <div id="loginError" class="sub hidden" style="color:#ffb4c0;margin-top:12px">بيانات الدخول غير صحيحة</div>
 </div>
-<div class="version">Version 3.1 Base<br>Session valid for 3 hours</div>
+
+<div class="version">Version 3.2<br>Session valid for 3 hours</div>
 </div>
 </section>
 
 <section id="settingsPage" class="page">
 <div class="container">
+
 <div class="top">
 <div style="color:#9aa4b8">A7_IB</div>
 <h2>⚙️ إعدادات الجولة</h2>
@@ -98,8 +577,10 @@ label{display:block;margin:16px 0 7px;font-weight:800;color:#d7dbea}
 
 <div class="card">
 <h2>أسماء الفرق</h2>
+
 <label style="color:#67a6ff">الفريق الأول</label>
 <input id="team1" value="عائلة أ">
+
 <label style="color:#ff8fa0">الفريق الثاني</label>
 <input id="team2" value="عائلة ب">
 </div>
@@ -110,9 +591,13 @@ label{display:block;margin:16px 0 7px;font-weight:800;color:#d7dbea}
 <option value="points">النقاط المستهدفة</option>
 <option value="rounds">عدد الجولات</option>
 </select>
+
 <label id="targetLabel">النقاط المستهدفة</label>
 <input id="targetValue" inputmode="numeric" placeholder="اتركها فاضية بدون حد">
-<div class="sub" style="text-align:right;margin:8px 0 0">إذا وصل فريق لهذا الرقم تنتهي اللعبة تلقائيًا.</div>
+
+<div class="sub" style="text-align:right;margin:8px 0 0">
+إذا وصل فريق لهذا الرقم تنتهي اللعبة تلقائيًا.
+</div>
 </div>
 
 <div class="card">
@@ -125,11 +610,13 @@ label{display:block;margin:16px 0 7px;font-weight:800;color:#d7dbea}
 </div>
 
 <button class="btn gold" onclick="saveSettings()">حفظ الإعدادات</button>
+
 </div>
 </section>
 
 <section id="lobbyPage" class="page">
 <div class="container">
+
 <div class="top">
 <button class="iconBtn" onclick="toggleMenu()">☰</button>
 <div class="pill" id="roomLabel">معلومات الغرفة</div>
@@ -137,11 +624,15 @@ label{display:block;margin:16px 0 7px;font-weight:800;color:#d7dbea}
 </div>
 
 <div class="teamBar">
+
 <div class="teamScore teamB">
 <div class="scoreRow">
 <button class="mini" onclick="changeScore('b',1)">+</button>
 <div><b id="teamBName">عائلة ب</b></div>
-<div class="scoreBtns"><span id="scoreB" class="scoreNum">0</span><button class="mini" onclick="changeScore('b',-1)">-</button></div>
+<div class="scoreBtns">
+<span id="scoreB" class="scoreNum">0</span>
+<button class="mini" onclick="changeScore('b',-1)">-</button>
+</div>
 </div>
 <div id="wrongB" class="wrongBox"></div>
 </div>
@@ -150,10 +641,14 @@ label{display:block;margin:16px 0 7px;font-weight:800;color:#d7dbea}
 <div class="scoreRow">
 <button class="mini" onclick="changeScore('a',1)">+</button>
 <div><b id="teamAName">عائلة أ</b></div>
-<div class="scoreBtns"><span id="scoreA" class="scoreNum">0</span><button class="mini" onclick="changeScore('a',-1)">-</button></div>
+<div class="scoreBtns">
+<span id="scoreA" class="scoreNum">0</span>
+<button class="mini" onclick="changeScore('a',-1)">-</button>
+</div>
 </div>
 <div id="wrongA" class="wrongBox"></div>
 </div>
+
 </div>
 
 <div id="lobbyEmpty" class="centerEmpty">
@@ -165,640 +660,765 @@ label{display:block;margin:16px 0 7px;font-weight:800;color:#d7dbea}
 <div id="previewBox" class="hidden"></div>
 <div id="playBox" class="hidden"></div>
 
-<div id="menuPanel" class="menuPanel hidden">
-<div class="menuItem" onclick="showTvModal()"><span>📺</span><div><b>عرض التلفزيون</b><small>QR code لفتح شاشة العرض</small></div></div>
-<div class="menuItem" onclick="goSettingsFromMenu()"><span>⚙️</span><div><b>الإعدادات</b><small>أسماء الفرق، المؤقت، النقاط المستهدفة</small></div></div>
-<div class="menuItem" onclick="showQuestionBank()"><span>📖</span><div><b>بنك الأسئلة</b><small>إدارة الأسئلة والإجابات</small></div></div>
-<div class="menuItem"><span>👥</span><div><b>المستخدمون</b><small>إدارة حسابات المستخدمين</small></div></div>
-<div class="menuItem" onclick="showRules()"><span>❔</span><div><b>تعليمات اللعب</b><small>قواعد وطريقة اللعب</small></div></div>
+<div id="menuPanel" class="menuPanel">
+<div class="menuItem" onclick="showTvModal()">
+<span>📺</span>
+<div><b>عرض التلفزيون</b><small>QR code لفتح شاشة العرض</small></div>
+</div>
+
+<div class="menuItem" onclick="goSettingsFromMenu()">
+<span>⚙️</span>
+<div><b>الإعدادات</b><small>أسماء الفرق، المؤقت، النقاط المستهدفة</small></div>
+</div>
+
+<div class="menuItem" onclick="showQuestionBank()">
+<span>📖</span>
+<div><b>بنك الأسئلة</b><small>إدارة الأسئلة والإجابات</small></div>
+</div>
+
+<div class="menuItem">
+<span>👥</span>
+<div><b>المستخدمون</b><small>إدارة حسابات المستخدمين</small></div>
+</div>
+
+<div class="menuItem" onclick="showRules()">
+<span>❔</span>
+<div><b>تعليمات اللعب</b><small>قواعد وطريقة اللعب</small></div>
+</div>
+
 <div class="sep"></div>
-<div class="menuItem" onclick="newRound()"><span style="color:#ff6b7d">↻</span><div><b style="color:#ff6b7d">جولة جديدة</b><small>إعادة إعدادات اللعبة من البداية</small></div></div>
-<div class="menuItem" onclick="logout()"><span>↪</span><div><b style="color:#9aa4b8">خروج</b></div></div>
+
+<div class="menuItem" onclick="newRound()">
+<span style="color:#ff6b7d">↻</span>
+<div><b style="color:#ff6b7d">جولة جديدة</b><small>إعادة إعدادات اللعبة من البداية</small></div>
 </div>
+
+<div class="menuItem" onclick="logout()">
+<span>↪</span>
+<div><b style="color:#9aa4b8">خروج</b></div>
+</div>
+</div>
+
 </div>
 </section>
-<section id="bankPage" class="page">
-<div class="container">
-<div class="top">
-<button class="iconBtn" onclick="showLobby()">←</button>
-<div><h2 style="color:var(--gold)">بنك الأسئلة</h2><small id="questionCount" class="sub">0 سؤال</small></div>
-<button class="gray" style="width:auto;padding:12px 18px;border-radius:14px" onclick="showLobby()">العودة</button>
+<!-- النوافذ -->
+
+<div id="tvModal" class="modal hidden">
+<div class="modalBox">
+<h2>📺 شاشة التلفزيون</h2>
+<div class="qr">QR</div>
+<div class="notice">امسح الكود لفتح شاشة العرض</div>
+<button class="btn gray" onclick="hideTvModal()">إغلاق</button>
+</div>
 </div>
 
-<div class="top">
-<button class="gray" style="width:auto;padding:12px 18px;border-radius:14px" onclick="document.getElementById('jsonFile').click()">رفع JSON ⬆</button>
-<button class="red" style="width:auto;padding:12px 18px;border-radius:14px" onclick="clearAllQuestions()">حذف الكل 🗑</button>
-<input id="jsonFile" type="file" accept=".json" class="hidden" onchange="importQuestions(event)">
-</div>
-
-<div class="card">
-<h2 style="color:var(--gold)">+ إضافة سؤال جديد</h2>
-<textarea id="questionText" placeholder="اكتب السؤال هنا..."></textarea>
-<div id="answersBox"></div>
-<button class="btn gold" onclick="saveQuestion()">💾 حفظ في البنك</button>
-</div>
-
-<div id="questionsList"></div>
-</div>
-</section>
-
-<section id="rulesModal" class="modal hidden">
-<div class="modalBox" style="text-align:right;max-height:85vh;overflow:auto">
-<button class="iconBtn" onclick="hideRules()">×</button>
-<h2 style="text-align:center;margin-bottom:15px">تعليمات اللعب ❔</h2>
+<div id="rulesModal" class="modal hidden">
+<div class="modalBox">
+<h2>تعليمات اللعب</h2>
 
 <div class="rulesCard">
 <h3>⚡ مرحلة المواجهة</h3>
-<p>يضغط ممثل كل فريق على الجرس. الأسرع يجيب على السؤال. إذا كانت إجابته ليست الأعلى نقاطًا، يحق لممثل الفريق الآخر الإجابة. صاحب الإجابة الأعلى يختار اللعب أو تمرير الجولة.</p>
+يضغط ممثل كل فريق على الجرس. الأسرع يجيب أولاً، وإن كانت إجابته من أعلى القائمة يفوز بالمواجهة ويختار اللعب أو التسليم.
 </div>
 
 <div class="rulesCard">
-<h3>▶️ مرحلة اللعب</h3>
-<p>الفريق اللاعب يحاول كشف الإجابات. كل إجابة مكشوفة تضاف إلى نقاط الجولة فقط، ولا تُضاف للنتيجة النهائية إلا بعد اعتماد الجولة.</p>
-</div>
-
-<div class="rulesCard">
-<h3>❌ الأخطاء</h3>
-<p>كل خطأ يظهر X بشكل دراماتيكي، ثم يُحتسب تحت الفريق الذي يلعب. عند الوصول إلى ثلاثة أخطاء تبدأ مرحلة السرقة.</p>
+<h3>▶ مرحلة اللعب</h3>
+الفريق اللاعب يجيب واحدًا تلو الآخر. كل إجابة صحيحة تكشف وتضاف نقاطها. بعد 3 أخطاء تبدأ السرقة.
 </div>
 
 <div class="rulesCard">
 <h3>🔥 مرحلة السرقة</h3>
-<p>الفريق السارق لديه فرصة واحدة. إذا نجحت السرقة تذهب نقاط الجولة للفريق السارق، وإذا فشلت تذهب للفريق الأصلي.</p>
+الفريق الآخر يملك فرصة واحدة فقط. إذا أصاب يحصل على نقاط الجولة كاملة، وإلا تذهب للفريق الأول.
+</div>
+
+<div class="rulesCard">
+<h3>🏆 النقاط</h3>
+نقاط الجولة هي مجموع الإجابات المكشوفة مضروبة في معامل الجولة.
 </div>
 
 <button class="btn gold" onclick="hideRules()">إغلاق</button>
 </div>
-</section>
-
-<section id="tvModal" class="modal hidden">
-<div class="modalBox">
-<h2>شاشة التلفزيون</h2>
-<div class="qr">▦</div>
-<p class="sub">امسح QR لفتح شاشة العرض</p>
-<button class="btn gold" onclick="hideTvModal()">إغلاق</button>
 </div>
-</section>
-
-<div id="xOverlay" class="xOverlay hidden">X</div>
 
 <script>
-const SESSION_KEY="ff_session";
-const ROOM_KEY="ff_room";
-const QUESTIONS_KEY="ff_questions";
 
-let timerValue=10;
-let scoreA=0;
-let scoreB=0;
-let wrongA=0;
-let wrongB=0;
-let currentQuestion=null;
-let currentIndex=null;
-let roundPoints=0;
-let activeTeam=null;
-let stealMode=false;
-let originalTeam=null;
-let stealingTeam=null;
-let timerInterval=null;
-let remainingSeconds=10;
+let gameTimer = 10;
+let timerInterval = null;
+
+let scoreA = 0;
+let scoreB = 0;
+
+let wrongA = 0;
+let wrongB = 0;
+
+let currentQuestion = null;
+let currentRoundPoints = 0;
+
+let activeTeam = "";
+let stealMode = false;
+
+const sampleQuestions = [
+
+{
+question:"شيء دايم تضيعه في البيت",
+answers:[
+{answer:"الجوال",points:40},
+{answer:"المفاتيح",points:25},
+{answer:"الريموت",points:15},
+{answer:"النظارة",points:10},
+{answer:"المحفظة",points:10}
+]
+},
+
+{
+question:"مكان يتجمع فيه الشباب بالليل",
+answers:[
+{answer:"استراحة",points:40},
+{answer:"مقهى",points:25},
+{answer:"ممشى",points:15},
+{answer:"سيارة",points:10},
+{answer:"بيت صديق",points:10}
+]
+}
+
+];
 
 function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("active");
+});
+
 document.getElementById(id).classList.add("active");
 }
 
 function login(){
-let u=document.getElementById("username").value.trim().toLowerCase();
-let p=document.getElementById("password").value;
-if(u==="a7_ib"&&p==="Admin@123"){
-localStorage.setItem(SESSION_KEY,Date.now()+3*60*60*1000);
+
+const u = document.getElementById("username").value.trim().toLowerCase();
+const p = document.getElementById("password").value;
+
+if(u==="a7_ib" && p==="Admin@123"){
+
+localStorage.setItem("ff_login","1");
+localStorage.setItem("ff_login_time",Date.now());
+
 showPage("settingsPage");
+
 }else{
+
 document.getElementById("loginError").classList.remove("hidden");
+
 }
+
+}
+
+function checkLogin(){
+
+const login = localStorage.getItem("ff_login");
+const loginTime = Number(localStorage.getItem("ff_login_time")||0);
+
+const threeHours = 3*60*60*1000;
+
+if(login==="1" && (Date.now()-loginTime)<threeHours){
+
+showPage("settingsPage");
+
+}
+
 }
 
 function logout(){
-localStorage.removeItem(SESSION_KEY);
+
+localStorage.removeItem("ff_login");
+localStorage.removeItem("ff_login_time");
+
 location.reload();
+
 }
 
 function updateTargetLabel(){
-let m=document.getElementById("winMode").value;
-document.getElementById("targetLabel").innerText=m==="points"?"النقاط المستهدفة":"عدد الجولات";
+
+const mode = document.getElementById("winMode").value;
+
+document.getElementById("targetLabel").innerText =
+mode==="points"
+? "النقاط المستهدفة"
+: "عدد الجولات";
+
 }
 
-function setTimer(v,btn){
-timerValue=v;
-remainingSeconds=v;
-document.querySelectorAll(".timerPick").forEach(b=>b.classList.remove("activeTimer"));
-btn.classList.add("activeTimer");
+function setTimer(v,el){
+
+gameTimer=v;
+
+document.querySelectorAll(".timerPick").forEach(x=>{
+x.classList.remove("activeTimer");
+});
+
+el.classList.add("activeTimer");
+
 }
 
 function saveSettings(){
-let mode=document.getElementById("winMode").value;
-let target=document.getElementById("targetValue").value;
 
-if(mode==="rounds" && target && (Number(target)<1 || Number(target)>15)){
-alert("عدد الجولات من 1 إلى 15");
-return;
-}
+document.getElementById("teamAName").innerText =
+document.getElementById("team1").value || "عائلة أ";
 
-let room={
-team1:document.getElementById("team1").value||"عائلة أ",
-team2:document.getElementById("team2").value||"عائلة ب",
-mode,
-target,
-timer:timerValue,
-code:"FF-"+Math.floor(1000+Math.random()*9000)
-};
-
-localStorage.setItem(ROOM_KEY,JSON.stringify(room));
-resetScoresOnly();
-loadLobby();
-}
-
-function loadLobby(){
-let r=JSON.parse(localStorage.getItem(ROOM_KEY));
-if(!r){showPage("settingsPage");return;}
-
-document.getElementById("teamAName").innerText=r.team1;
-document.getElementById("teamBName").innerText=r.team2;
-document.getElementById("roomLabel").innerText="معلومات الغرفة "+r.code;
-timerValue=Number(r.timer)||10;
-remainingSeconds=timerValue;
+document.getElementById("teamBName").innerText =
+document.getElementById("team2").value || "عائلة ب";
 
 showPage("lobbyPage");
-renderWrongs();
+
 }
 
 function toggleMenu(){
-document.getElementById("menuPanel").classList.toggle("hidden");
-}
 
-function showLobby(){
-showPage("lobbyPage");
-document.getElementById("menuPanel").classList.add("hidden");
-}
+document.getElementById("menuPanel")
+.classList.toggle("show");
 
-function goSettingsFromMenu(){
-showPage("settingsPage");
-document.getElementById("menuPanel").classList.add("hidden");
 }
 
 function showTvModal(){
-document.getElementById("tvModal").classList.remove("hidden");
-document.getElementById("menuPanel").classList.add("hidden");
+
+document.getElementById("tvModal")
+.classList.remove("hidden");
+
 }
 
 function hideTvModal(){
-document.getElementById("tvModal").classList.add("hidden");
+
+document.getElementById("tvModal")
+.classList.add("hidden");
+
 }
 
 function showRules(){
-document.getElementById("rulesModal").classList.remove("hidden");
-document.getElementById("menuPanel").classList.add("hidden");
+
+document.getElementById("rulesModal")
+.classList.remove("hidden");
+
 }
 
 function hideRules(){
-document.getElementById("rulesModal").classList.add("hidden");
+
+document.getElementById("rulesModal")
+.classList.add("hidden");
+
 }
 
-function changeScore(t,v){
-if(t==="a"){
-scoreA=Math.max(0,scoreA+v);
-document.getElementById("scoreA").innerText=scoreA;
-}else{
-scoreB=Math.max(0,scoreB+v);
-document.getElementById("scoreB").innerText=scoreB;
-}
-}
+function goSettingsFromMenu(){
 
-function resetScoresOnly(){
-scoreA=0;
-scoreB=0;
-wrongA=0;
-wrongB=0;
-roundPoints=0;
-activeTeam=null;
-stealMode=false;
-originalTeam=null;
-stealingTeam=null;
-document.getElementById("scoreA").innerText=0;
-document.getElementById("scoreB").innerText=0;
-renderWrongs();
-}
+toggleMenu();
 
-function renderWrongs(){
-document.getElementById("wrongA").innerHTML="X ".repeat(wrongA);
-document.getElementById("wrongB").innerHTML="X ".repeat(wrongB);
-}
+showPage("settingsPage");
 
-function getQuestions(){
-return JSON.parse(localStorage.getItem(QUESTIONS_KEY)||"[]");
-}
-
-function setQuestions(q){
-localStorage.setItem(QUESTIONS_KEY,JSON.stringify(q));
-}
-
-function showQuestionBank(){
-showPage("bankPage");
-document.getElementById("menuPanel").classList.add("hidden");
-buildAnswerInputs();
-renderQuestions();
-}
-
-function buildAnswerInputs(){
-let h="";
-for(let i=1;i<=6;i++){
-h+=`
-<label>الإجابة ${i}</label>
-<div class="answerRow">
-<input id="ans${i}" placeholder="الإجابة">
-<input id="pts${i}" type="number" placeholder="نقاط">
-</div>`;
-}
-document.getElementById("answersBox").innerHTML=h;
-}
-
-function saveQuestion(){
-let q=document.getElementById("questionText").value.trim();
-if(!q){alert("اكتب السؤال");return;}
-
-let answers=[];
-for(let i=1;i<=6;i++){
-let a=document.getElementById("ans"+i).value.trim();
-let p=Number(document.getElementById("pts"+i).value)||0;
-if(a)answers.push({text:a,points:p});
-}
-
-if(!answers.length){alert("أضف إجابة واحدة على الأقل");return;}
-
-let all=getQuestions();
-all.push({question:q,answers});
-setQuestions(all);
-
-document.getElementById("questionText").value="";
-buildAnswerInputs();
-renderQuestions();
-}
-
-function renderQuestions(){
-let all=getQuestions();
-document.getElementById("questionCount").innerText=all.length+" سؤال";
-document.getElementById("questionsList").innerHTML=all.map((q,i)=>`
-<div class="questionItem">
-<b>${i+1}. ${q.question}</b><br>
-<small>${q.answers.length} إجابات</small>
-<button class="btn red" onclick="deleteQuestion(${i})">حذف</button>
-</div>`).join("")||"<p class='sub'>لا توجد أسئلة</p>";
-}
-
-function deleteQuestion(i){
-let q=getQuestions();
-q.splice(i,1);
-setQuestions(q);
-renderQuestions();
-}
-
-function clearAllQuestions(){
-if(confirm("حذف كل الأسئلة؟")){
-setQuestions([]);
-renderQuestions();
-}
-}
-
-function importQuestions(e){
-let f=e.target.files[0];
-if(!f)return;
-let r=new FileReader();
-r.onload=x=>{
-try{
-let arr=JSON.parse(x.target.result);
-setQuestions(getQuestions().concat(arr));
-renderQuestions();
-}catch{
-alert("ملف غير صحيح");
-}
-};
-r.readAsText(f);
 }
 
 function previewRandomQuestion(){
-let qs=getQuestions();
-if(!qs.length){alert("أضف أسئلة أولاً");return;}
 
-currentIndex=Math.floor(Math.random()*qs.length);
-currentQuestion=qs[currentIndex];
+const q =
+sampleQuestions[
+Math.floor(Math.random()*sampleQuestions.length)
+];
+
+currentQuestion=q;
+
+let html=`
+
+<div class="previewCard">
+
+<div style="text-align:center;color:#9aa4b8">
+معاينة السؤال
+</div>
+
+<div class="previewQ">
+${q.question}
+</div>
+
+`;
+
+q.answers.forEach((a,i)=>{
+
+html+=`
+
+<div class="previewAns">
+<span>${a.points}</span>
+<span>${a.answer}</span>
+<span>${i+1}</span>
+</div>
+
+`;
+
+});
+
+html+=`
+
+<button class="btn gold" onclick="startRound()">
+▶ بدء الجولة
+</button>
+
+<button class="btn gray" onclick="previewRandomQuestion()">
+⏭ سؤال آخر
+</button>
+
+</div>
+
+`;
 
 document.getElementById("lobbyEmpty").classList.add("hidden");
-document.getElementById("playBox").classList.add("hidden");
+
+document.getElementById("previewBox").innerHTML=html;
 document.getElementById("previewBox").classList.remove("hidden");
 
-document.getElementById("previewBox").innerHTML=`
-<div class="previewCard">
-<div class="sub">معاينة السؤال — هذا ما سيظهر على اللاعبين</div>
-<div class="previewQ">${currentQuestion.question}</div>
-${currentQuestion.answers.map((a,i)=>`
-<div class="previewAns">
-<span>${i+1}. ${a.text}</span>
-<b>${a.points}</b>
-</div>`).join("")}
-<button class="btn gold" onclick="startRound()">▶️ بدء الجولة</button>
-<button class="btn gray" onclick="previewRandomQuestion()">⏭ تخطي - سؤال آخر</button>
-</div>`;
 }
 
 function startRound(){
-roundPoints=0;
+
+currentRoundPoints=0;
 wrongA=0;
 wrongB=0;
-activeTeam=null;
 stealMode=false;
-originalTeam=null;
-stealingTeam=null;
-renderWrongs();
-stopTimer();
 
-let room=JSON.parse(localStorage.getItem(ROOM_KEY));
+renderWrongs();
+
+let html=`
+
+<div class="card">
+
+<div style="text-align:center;color:#9aa4b8">
+مرحلة المواجهة
+</div>
+
+<h2 style="text-align:center;margin-top:10px">
+${currentQuestion.question}
+</h2>
+
+<div class="faceoffGrid">
+
+<div class="faceCard" id="faceA">
+<div class="faceTeam">${document.getElementById("teamAName").innerText}</div>
+<div class="faceRep">ممثل الفريق الأول</div>
+</div>
+
+<div class="faceCard" id="faceB">
+<div class="faceTeam">${document.getElementById("teamBName").innerText}</div>
+<div class="faceRep">ممثل الفريق الثاني</div>
+</div>
+
+</div>
+
+<div class="awardGrid">
+
+<button class="btn blue"
+onclick="chooseWinner('a')">
+فاز ممثل عائلة أ
+</button>
+
+<button class="btn red"
+onclick="chooseWinner('b')">
+فاز ممثل عائلة ب
+</button>
+
+</div>
+
+</div>
+
+`;
 
 document.getElementById("previewBox").classList.add("hidden");
+document.getElementById("playBox").innerHTML=html;
 document.getElementById("playBox").classList.remove("hidden");
 
+}
+
+function chooseWinner(team){
+
+activeTeam=team;
+
+renderPlayOrPass();
+
+}
+
+function renderPlayOrPass(){
+
+const teamName =
+activeTeam==="a"
+? document.getElementById("teamAName").innerText
+: document.getElementById("teamBName").innerText;
+
+const otherName =
+activeTeam==="a"
+? document.getElementById("teamBName").innerText
+: document.getElementById("teamAName").innerText;
+
 document.getElementById("playBox").innerHTML=`
-<div class="previewCard">
 
-<div class="sub">مرحلة المواجهة</div>
-<div class="previewQ">${currentQuestion.question}</div>
+<div class="card">
 
-<label>ممثل ${room.team1}</label>
-<input id="repA" placeholder="اسم ممثل الفريق الأول">
+<div class="faceoffGrid">
 
-<label>ممثل ${room.team2}</label>
-<input id="repB" placeholder="اسم ممثل الفريق الثاني">
-
-<div class="winnerGrid">
-<button class="btn blue" onclick="selectFaceoffWinner('a')">الفائز في المواجهة: ${room.team1}</button>
-<button class="btn red" onclick="selectFaceoffWinner('b')">الفائز في المواجهة: ${room.team2}</button>
+<div class="faceCard ${activeTeam==='a'?'active':''}">
+<div class="faceTeam">${document.getElementById("teamAName").innerText}</div>
 </div>
 
-<div id="faceoffStatus"></div>
-
-<div class="sub" style="margin-top:18px">الإجابات — اضغط لكشف الإجابة، واضغط مرة ثانية لإخفائها</div>
-
-${buildRoundAnswers()}
-
-<div class="timerPanel">
-<div class="sub">المؤقت</div>
-<div id="timerDisplay" class="timerNum">${timerValue}</div>
-<div class="timerBtns">
-<button class="smallControl green" onclick="startTimer()">ابدأ</button>
-<button class="smallControl red" onclick="stopTimer()">إيقاف</button>
-<button class="smallControl gray" onclick="resetTimer()">إعادة</button>
-<button class="smallControl gold" onclick="editTimer()">تعديل</button>
+<div class="faceCard ${activeTeam==='b'?'active':''}">
+<div class="faceTeam">${document.getElementById("teamBName").innerText}</div>
 </div>
+
 </div>
+
+<div class="notice">
+${teamName} فاز في المواجهة
+</div>
+
+<button class="btn gold"
+onclick="beginGame('${activeTeam}')">
+يلعب ${teamName}
+</button>
+
+<button class="btn gray"
+onclick="beginGame('${activeTeam==='a'?'b':'a'}')">
+يسلمها إلى ${otherName}
+</button>
+
+</div>
+
+`;
+
+}
+
+function beginGame(team){
+
+activeTeam=team;
+
+renderQuestionBoard();
+
+}
+
+function renderQuestionBoard(){
+
+let html=`
+
+<div class="card">
+
+<h2 style="text-align:center">
+${currentQuestion.question}
+</h2>
+
+`;
+
+for(let i=0;i<6;i++){
+
+const ans=currentQuestion.answers[i];
+
+if(ans){
+
+html+=`
+
+<div class="playAnswer"
+onclick="toggleAnswer(${i})"
+id="ans${i}">
+
+<span>${i+1}</span>
+<span>•••••</span>
+<span>${ans.points}</span>
+
+</div>
+
+`;
+
+}else{
+
+html+=`
+
+<div class="playAnswer empty">
+<span>${i+1}</span>
+<span>—</span>
+<span>0</span>
+</div>
+
+`;
+
+}
+
+}
+
+html+=`
 
 <div class="bottomControls">
+
 <div class="controlGrid">
-<button class="smallControl red" onclick="wrongAnswer()">خطأ X</button>
-<button class="smallControl gray" onclick="previewRandomQuestion()">سؤال آخر</button>
-<button class="smallControl gold" onclick="startSteal()">سرقة</button>
+
+<button class="smallControl"
+onclick="addWrong()">
+خطأ X
+</button>
+
+<button class="smallControl"
+onclick="startSteal()">
+سرقة
+</button>
+
+<button class="smallControl"
+onclick="previewRandomQuestion()">
+سؤال آخر
+</button>
+
 </div>
 
-<button class="btn blue" onclick="showAwardOptions()">اعتماد نقاط الجولة</button>
+<div class="timerPanel">
+
+<div class="timerNum" id="timerValue">
+${gameTimer}
 </div>
 
-</div>`;
-}
+<div class="timerBtns">
 
-function buildRoundAnswers(){
-let html="";
-for(let i=0;i<6;i++){
-let a=currentQuestion.answers[i];
-html+=`
-<div class="playAnswer ${!a?'empty':''}" data-points="${a?a.points:0}" onclick="toggleAnswer(this)">
-<span>${i+1}. ${a?a.text:"إجابة فارغة"}</span>
-<b>${a?a.points:"-"}</b>
-</div>`;
-}
-return html;
-}
+<button class="smallControl green"
+onclick="runTimer()">
+تشغيل
+</button>
 
-function selectFaceoffWinner(team){
-let room=JSON.parse(localStorage.getItem(ROOM_KEY));
-let repA=document.getElementById("repA").value||"ممثل الفريق الأول";
-let repB=document.getElementById("repB").value||"ممثل الفريق الثاني";
-let winnerName=team==="a"?room.team1:room.team2;
-let loserName=team==="a"?room.team2:room.team1;
+<button class="smallControl red"
+onclick="stopTimer()">
+إيقاف
+</button>
 
-document.getElementById("faceoffStatus").innerHTML=`
-<div class="faceoffGrid">
-<div class="faceCard ${team==='b'?'active':''}">
-<div class="faceTeam">${room.team2}</div>
-<div class="faceRep">${repB}</div>
+<button class="smallControl"
+onclick="gameTimer++ ; updateTimer()">
++
+</button>
+
+<button class="smallControl"
+onclick="gameTimer-- ; updateTimer()">
+-
+</button>
+
 </div>
-<div class="faceCard ${team==='a'?'active':''}">
-<div class="faceTeam">${room.team1}</div>
-<div class="faceRep">${repA}</div>
+
 </div>
+
 </div>
-<div class="card">
-<b>${winnerName}</b> فاز في المواجهة.
-<button class="btn gold" onclick="decidePlay('${team}')">يلعب ${winnerName}</button>
-<button class="btn gray" onclick="passPlay('${team}')">يسلمها إلى ${loserName}</button>
-</div>`;
 
-let q=`هل يرغب فريق ${winnerName} في لعب المواجهة؟ اضغط موافق للعب أو إلغاء لتسليمها إلى ${loserName}`;
-if(confirm(q)){decidePlay(team);}else{passPlay(team);}
+</div>
+
+`;
+
+document.getElementById("playBox").innerHTML=html;
+
 }
 
-function decidePlay(team){
-activeTeam=team;
-originalTeam=team;
-stealingTeam=team==="a"?"b":"a";
-alert("الفريق اللاعب: "+teamName(team));
-}
+function toggleAnswer(index){
 
-function passPlay(team){
-activeTeam=team==="a"?"b":"a";
-originalTeam=activeTeam;
-stealingTeam=activeTeam==="a"?"b":"a";
-alert("تم تسليم الجولة إلى: "+teamName(activeTeam));
-}
+const row=document.getElementById("ans"+index);
 
-function teamName(t){
-let room=JSON.parse(localStorage.getItem(ROOM_KEY));
-return t==="a"?room.team1:room.team2;
-}
+if(!row.classList.contains("revealed")){
 
-function toggleAnswer(el){
-if(el.classList.contains("empty"))return;
-let points=Number(el.dataset.points)||0;
+row.classList.add("revealed");
 
-if(el.classList.contains("revealed")){
-el.classList.remove("revealed");
-roundPoints=Math.max(0,roundPoints-points);
+row.innerHTML=`
+<span>${index+1}</span>
+<span>${currentQuestion.answers[index].answer}</span>
+<span>${currentQuestion.answers[index].points}</span>
+`;
+
+currentRoundPoints+=currentQuestion.answers[index].points;
+
 }else{
-el.classList.add("revealed");
-roundPoints+=points;
-}
+
+row.classList.remove("revealed");
+
+row.innerHTML=`
+<span>${index+1}</span>
+<span>•••••</span>
+<span>${currentQuestion.answers[index].points}</span>
+`;
+
+currentRoundPoints-=currentQuestion.answers[index].points;
+
 }
 
-function wrongAnswer(){
-if(!activeTeam){
-alert("حدد الفريق الذي يلعب الجولة أولاً");
-return;
 }
 
-if(stealMode){
-alert("في مرحلة السرقة، استخدم أزرار نتيجة السرقة.");
-return;
+function addWrong(){
+
+showBigX();
+
+if(activeTeam==="a"){
+
+wrongA++;
+
+if(wrongA>=3){
+startSteal();
 }
 
-showDramaticX(function(){
-if(activeTeam==="a"){wrongA++;}
-else{wrongB++;}
+}else{
+
+wrongB++;
+
+if(wrongB>=3){
+startSteal();
+}
+
+}
 
 renderWrongs();
 
-if((activeTeam==="a"&&wrongA>=3)||(activeTeam==="b"&&wrongB>=3)){
-startSteal();
-}
-});
 }
 
-function showDramaticX(callback){
-document.getElementById("xOverlay").classList.remove("hidden");
+function renderWrongs(){
+
+document.getElementById("wrongA").innerHTML=
+"❌".repeat(wrongA);
+
+document.getElementById("wrongB").innerHTML=
+"❌".repeat(wrongB);
+
+}
+
+function showBigX(){
+
+const div=document.createElement("div");
+
+div.className="xOverlay";
+div.innerHTML="X";
+
+document.body.appendChild(div);
+
 setTimeout(()=>{
-document.getElementById("xOverlay").classList.add("hidden");
-if(callback)callback();
-},1500);
+div.remove();
+},1000);
+
 }
 
 function startSteal(){
-if(!originalTeam){
-originalTeam=activeTeam;
-stealingTeam=activeTeam==="a"?"b":"a";
-}
 
 stealMode=true;
 
-alert("🔥 بدأت مرحلة السرقة. الفريق السارق: "+teamName(stealingTeam));
+document.getElementById("playBox").insertAdjacentHTML(
+"beforeend",
+`
+<div class="awardPanel">
 
-let box=document.getElementById("playBox");
-let extra=document.createElement("div");
-extra.className="card";
-extra.id="stealPanel";
-extra.innerHTML=`
-<h3 style="color:var(--gold)">🔥 مرحلة السرقة</h3>
-<p class="sub" style="text-align:right;margin-top:8px">
-الفريق السارق: <b>${teamName(stealingTeam)}</b><br>
-اكشف الإجابة التي اختارها الفريق السارق، ثم اختر نتيجة السرقة.
-</p>
-<button class="btn green" onclick="stealSuccess()">تمت السرقة بنجاح — النقاط لـ ${teamName(stealingTeam)}</button>
-<button class="btn red" onclick="stealFail()">لم تتم السرقة — النقاط لـ ${teamName(originalTeam)}</button>
-`;
-box.appendChild(extra);
+<h2>🔥 مرحلة السرقة</h2>
+
+<div class="notice">
+اكشف إجابة الفريق السارق ثم اختر النتيجة
+</div>
+
+<div class="awardGrid">
+
+<button class="btn green"
+onclick="awardSteal(true)">
+نجحت السرقة
+</button>
+
+<button class="btn red"
+onclick="awardSteal(false)">
+فشلت السرقة
+</button>
+
+</div>
+
+</div>
+`
+);
+
 }
 
-function stealSuccess(){
-awardToTeam(stealingTeam);
-}
+function awardSteal(success){
 
-function stealFail(){
-awardToTeam(originalTeam);
-}
+if(success){
 
-function showAwardOptions(){
-if(!activeTeam){
-alert("حدد الفريق اللاعب أولاً");
-return;
-}
-let winner=confirm("اعتماد النقاط للفريق الأول؟ اضغط إلغاء لاعتمادها للفريق الثاني.");
-awardToTeam(winner?"a":"b");
-}
-
-function awardToTeam(team){
-if(team==="a"){
-scoreA+=roundPoints;
-document.getElementById("scoreA").innerText=scoreA;
+if(activeTeam==="a"){
+scoreB+=currentRoundPoints;
 }else{
-scoreB+=roundPoints;
+scoreA+=currentRoundPoints;
+}
+
+}else{
+
+if(activeTeam==="a"){
+scoreA+=currentRoundPoints;
+}else{
+scoreB+=currentRoundPoints;
+}
+
+}
+
+updateScores();
+
+}
+
+function changeScore(team,val){
+
+if(team==="a"){
+scoreA=Math.max(0,scoreA+val);
+}else{
+scoreB=Math.max(0,scoreB+val);
+}
+
+updateScores();
+
+}
+
+function updateScores(){
+
+document.getElementById("scoreA").innerText=scoreA;
 document.getElementById("scoreB").innerText=scoreB;
+
 }
 
-roundPoints=0;
-wrongA=0;
-wrongB=0;
-activeTeam=null;
-stealMode=false;
-originalTeam=null;
-stealingTeam=null;
-renderWrongs();
-previewRandomQuestion();
-}
+function runTimer(){
 
-function startTimer(){
 stopTimer();
+
 timerInterval=setInterval(()=>{
-remainingSeconds--;
-document.getElementById("timerDisplay").innerText=remainingSeconds;
-if(remainingSeconds<=0){
+
+gameTimer--;
+
+updateTimer();
+
+if(gameTimer<=0){
+
 stopTimer();
-showDramaticX();
+
 }
+
 },1000);
+
 }
 
 function stopTimer(){
-if(timerInterval){
+
 clearInterval(timerInterval);
-timerInterval=null;
-}
+
 }
 
-function resetTimer(){
-stopTimer();
-remainingSeconds=timerValue;
-let d=document.getElementById("timerDisplay");
-if(d)d.innerText=remainingSeconds;
+function updateTimer(){
+
+const x=document.getElementById("timerValue");
+
+if(x){
+x.innerText=gameTimer;
 }
 
-function editTimer(){
-let v=prompt("اكتب وقت المؤقت بالثواني:",remainingSeconds);
-if(v && Number(v)>0){
-timerValue=Number(v);
-remainingSeconds=Number(v);
-let d=document.getElementById("timerDisplay");
-if(d)d.innerText=remainingSeconds;
 }
+
+function showQuestionBank(){
+
+alert("الخطوة القادمة: بنك الأسئلة الكامل مع التعديل والحفظ الدائم");
+
 }
 
 function newRound(){
-if(confirm("بدء جولة جديدة؟ سيتم حذف إعدادات الغرفة والنقاط فقط، وسيبقى بنك الأسئلة محفوظًا.")){
-localStorage.removeItem(ROOM_KEY);
-scoreA=0;scoreB=0;wrongA=0;wrongB=0;roundPoints=0;
-currentQuestion=null;currentIndex=null;activeTeam=null;
-stealMode=false;originalTeam=null;stealingTeam=null;
-stopTimer();
 
-document.getElementById("menuPanel").classList.add("hidden");
-document.getElementById("lobbyEmpty").classList.remove("hidden");
-document.getElementById("previewBox").classList.add("hidden");
-document.getElementById("playBox").classList.add("hidden");
+location.reload();
 
-showPage("settingsPage");
-}
 }
 
-(function init(){
-let exp=Number(localStorage.getItem(SESSION_KEY)||0);
-if(exp>Date.now()){
-localStorage.getItem(ROOM_KEY)?loadLobby():showPage("settingsPage");
-}
-})();
+checkLogin();
+
 </script>
 
 </body>
