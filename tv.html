@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AH TV Display</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{background:#070b24;color:white;min-height:100vh;overflow:hidden}
+.stage{width:100vw;height:100vh;background:radial-gradient(circle at center,#11195a,#070b24 70%);position:relative;padding:45px}
+.logo{position:absolute;top:25px;right:45px;color:#e8bb3f;font-weight:900;font-size:28px}
+.roundScore{position:absolute;top:60px;left:50%;transform:translateX(-50%);width:120px;height:120px;border:5px solid #e8bb3f;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:900;background:#050816;box-shadow:0 0 35px #e8bb3f66}
+.timer{position:absolute;top:85px;right:330px;font-size:42px;font-weight:900}
+.team{position:absolute;top:115px;width:250px;height:520px;border:3px solid #6b2fa8;border-radius:28px;background:rgba(48,20,84,.35);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.team.left{left:70px}
+.team.right{right:70px}
+.teamName{font-size:28px;font-weight:900;margin-bottom:18px}
+.teamPoints{border:4px solid #e8bb3f;border-radius:18px;width:180px;height:80px;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;background:#050816}
+.players{margin-top:18px;color:#cbd5e1;font-size:20px}
+.currentPlayer{margin-top:14px;color:#e8bb3f;font-size:20px}
+.wrongs{margin-top:18px;color:#aaa;font-size:34px;letter-spacing:10px}
+.board{position:absolute;top:210px;left:50%;transform:translateX(-50%);width:760px;height:430px;border:4px solid #e8bb3f;border-radius:30px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;background:rgba(0,0,0,.25)}
+.answer{background:linear-gradient(145deg,#102b86,#172a78);border:2px solid #1e40af;border-radius:18px;display:flex;align-items:center;justify-content:center;position:relative;font-size:28px;font-weight:900;color:#9db7ff}
+.answer .num{position:absolute;right:18px;width:42px;height:42px;border-radius:50%;background:#1d4ed8;display:flex;align-items:center;justify-content:center;color:#8fb5ff}
+.answer.revealed{color:white;justify-content:space-between;padding:0 70px 0 35px}
+.answer.revealed .points{color:#e8bb3f;font-size:34px}
+.qr{position:absolute;right:75px;bottom:35px;width:120px;height:120px;background:white;color:black;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;cursor:pointer}
+.qr.full{position:fixed;inset:0;width:100vw;height:100vh;border-radius:0;z-index:20;font-size:80px}
+.qrText{position:absolute;right:95px;bottom:15px;color:#9ca3af}
+.bigX{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;font-size:260px;color:red;font-weight:900;text-shadow:0 0 60px red;z-index:10}
+</style>
+</head>
+<body>
+
+<div class="stage">
+<div class="logo">AH</div>
+<div class="roundScore" id="roundScore">0</div>
+<div class="timer" id="timer">60 ث ⏱</div>
+
+<div class="team left">
+<div class="teamName" id="teamAName">عائلة أ</div>
+<div class="teamPoints" id="teamAPoints">0</div>
+<div class="players">اللاعبون: <span id="teamAPlayers">0</span></div>
+<div class="currentPlayer" id="teamAPlayer">اللاعب الحالي</div>
+<div class="wrongs" id="teamAWrongs">× × ×</div>
+</div>
+
+<div class="team right">
+<div class="teamName" id="teamBName">عائلة ب</div>
+<div class="teamPoints" id="teamBPoints">0</div>
+<div class="players">اللاعبون: <span id="teamBPlayers">0</span></div>
+<div class="currentPlayer" id="teamBPlayer">اللاعب الحالي</div>
+<div class="wrongs" id="teamBWrongs">× × ×</div>
+</div>
+
+<div class="board">
+<div class="answer"><span class="num">1</span>•••••</div>
+<div class="answer"><span class="num">2</span>•••••</div>
+<div class="answer"><span class="num">3</span>•••••</div>
+<div class="answer"><span class="num">4</span>•••••</div>
+<div class="answer"><span class="num">5</span>•••••</div>
+<div class="answer"><span class="num">6</span>•••••</div>
+</div>
+
+<div class="qr" onclick="toggleQR()">QR</div>
+<div class="qrText">انضمام</div>
+<div class="bigX" id="bigX">X</div>
+</div>
+
+<script>
+function toggleQR(){
+document.querySelector(".qr").classList.toggle("full");
+}
+
+function showX(){
+const x=document.getElementById("bigX");
+x.style.display="flex";
+setTimeout(()=>x.style.display="none",1500);
+}
+</script>
+
+</body>
+</html>
