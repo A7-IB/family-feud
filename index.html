@@ -61,7 +61,7 @@ label{display:block;margin:14px 0 7px;font-weight:800}
 <button class="btn gold" onclick="login()">دخول ↪</button>
 <div id="loginError" class="sub hidden" style="color:#ffb4c0;margin-top:12px">بيانات الدخول غير صحيحة</div>
 </div>
-<div class="sub">Version 3.4</div>
+<div class="sub">Version 3.5.0</div>
 </div>
 </section>
 
@@ -117,11 +117,56 @@ function hideRoomInfo(){roomModal.classList.add("hidden")}
 function showTvModal(){tvModal.classList.remove("hidden");menuPanel.classList.remove("show")}function hideTvModal(){tvModal.classList.add("hidden")}
 function changeScore(t,v){if(t==="a"){scoreA=Math.max(0,scoreA+v);document.getElementById("scoreA").innerText=scoreA}else{scoreB=Math.max(0,scoreB+v);document.getElementById("scoreB").innerText=scoreB}}
 function renderWrongs(){document.getElementById("wrongA").innerHTML="❌".repeat(wrongA);document.getElementById("wrongB").innerHTML="❌".repeat(wrongB)}
-function previewRandomQuestion(){current=questions[Math.floor(Math.random()*questions.length)];lobbyEmpty.classList.add("hidden");playBox.classList.add("hidden");previewBox.classList.remove("hidden");previewBox.innerHTML=`<div class="previewCard"><div class="previewQ">${current.question}</div>${current.answers.map((a,i)=>`<div class="previewAns"><span>${i+1}. ${a.text}</span><b>${a.points}</b></div>`).join("")}<button class="btn gold" onclick="startRound()">بدء الجولة</button><button class="btn gray" onclick="previewRandomQuestion()">تغيير السؤال</button></div>`}
-function startRound(){roundPoints=0;wrongA=0;wrongB=0;activeTeam="";renderWrongs();let repA=reps[Math.floor(Math.random()*reps.length)],repB=reps[Math.floor(Math.random()*reps.length)];previewBox.classList.add("hidden");playBox.classList.remove("hidden");playBox.innerHTML=`<div class="previewCard"><div class="sub">مرحلة المواجهة</div><div class="previewQ">${current.question}</div><div class="faceoffGrid"><div id="cardA" class="faceCard" onclick="chooseFace('a')"><div class="faceTeam">${room.team1}</div><div class="faceRep">${repA}</div></div><div id="cardB" class="faceCard" onclick="chooseFace('b')"><div class="faceTeam">${room.team2}</div><div class="faceRep">${repB}</div></div></div><div id="faceActions"></div><div id="answersArea"></div></div>`}
-function chooseFace(t){faceWinner=t;cardA.classList.toggle("active",t==="a");cardB.classList.toggle("active",t==="b");let winner=t==="a"?room.team1:room.team2,other=t==="a"?room.team2:room.team1;faceActions.innerHTML=`<div class="notice">${winner} فاز في المواجهة</div><button class="btn gold" onclick="beginGame('${t}')">يلعب ${winner}</button><button class="btn gray" onclick="beginGame('${t==="a"?"b":"a"}')">يسلمها إلى ${other}</button>`}
-function beginGame(t){activeTeam=t;cardA.classList.toggle("active",t==="a");cardB.classList.toggle("active",t==="b");renderAnswers()}
-function renderAnswers(){answersArea.innerHTML=`${[0,1,2,3,4,5].map(i=>{let a=current.answers[i];return `<div id="ans${i}" class="playAnswer ${!a?'empty':''}" onclick="toggleAns(${i})"><span>${i+1}. ${a?a.text:"—"}</span><b>${a?a.points:0}</b></div>`}).join("")}<div class="controlGrid"><button class="smallControl red" onclick="addWrong()">خطأ X</button><button class="smallControl gray" onclick="previewRandomQuestion()">سؤال آخر</button><button class="smallControl gold" onclick="startSteal()">سرقة</button></div><div class="timerPanel"><div id="timerShow" class="timerNum">${remaining}</div><div class="timerBtns"><button class="smallControl green" onclick="runTimer()">ابدأ</button><button class="smallControl red" onclick="stopTimer()">إيقاف</button><button class="smallControl" onclick="remaining++;timerShow.innerText=remaining">+</button><button class="smallControl" onclick="remaining=Math.max(1,remaining-1);timerShow.innerText=remaining">-</button></div></div><div id="awardArea"></div>`}
+
+function previewRandomQuestion(){
+current=questions[Math.floor(Math.random()*questions.length)];
+lobbyEmpty.classList.add("hidden");
+playBox.classList.add("hidden");
+previewBox.classList.remove("hidden");
+previewBox.innerHTML=`<div class="previewCard"><div class="previewQ">${current.question}</div>${current.answers.map((a,i)=>`<div class="previewAns"><span>${i+1}. ${a.text}</span><b>${a.points}</b></div>`).join("")}<button class="btn gold" onclick="startRound()">بدء الجولة</button><button class="btn gray" onclick="previewRandomQuestion()">تغيير السؤال</button></div>`
+}
+
+function startRound(){
+roundPoints=0;wrongA=0;wrongB=0;activeTeam="";renderWrongs();
+let repA=reps[Math.floor(Math.random()*reps.length)],repB=reps[Math.floor(Math.random()*reps.length)];
+previewBox.classList.add("hidden");playBox.classList.remove("hidden");
+playBox.innerHTML=`<div class="previewCard">
+<div class="sub">مرحلة المواجهة</div>
+<div class="previewQ">${current.question}</div>
+<div class="faceoffGrid">
+<div id="cardA" class="faceCard" onclick="chooseFace('a')"><div class="faceTeam">${room.team1}</div><div class="faceRep">${repA}</div></div>
+<div id="cardB" class="faceCard" onclick="chooseFace('b')"><div class="faceTeam">${room.team2}</div><div class="faceRep">${repB}</div></div>
+</div>
+<div id="faceActions"></div>
+<div id="answersArea"></div>
+</div>`;
+renderAnswers();
+}
+
+function chooseFace(t){
+faceWinner=t;
+cardA.classList.toggle("active",t==="a");
+cardB.classList.toggle("active",t==="b");
+let winner=t==="a"?room.team1:room.team2,other=t==="a"?room.team2:room.team1;
+faceActions.innerHTML=`<div class="notice">${winner} فاز في المواجهة</div><button class="btn gold" onclick="beginGame('${t}')">يلعب ${winner}</button><button class="btn gray" onclick="beginGame('${t==="a"?"b":"a"}')">يسلمها إلى ${other}</button>`
+}
+
+function beginGame(t){
+activeTeam=t;
+cardA.classList.toggle("active",t==="a");
+cardB.classList.toggle("active",t==="b");
+let playing=t==="a"?room.team1:room.team2;
+faceActions.innerHTML=`<div class="notice">الفريق اللاعب: ${playing}</div>`;
+renderAnswers();
+}
+
+function renderAnswers(){
+answersArea.innerHTML=`${[0,1,2,3,4,5].map(i=>{let a=current.answers[i];return `<div id="ans${i}" class="playAnswer ${!a?'empty':''}" onclick="toggleAns(${i})"><span>${i+1}. ${a?a.text:"—"}</span><b>${a?a.points:0}</b></div>`}).join("")}
+<div class="controlGrid"><button class="smallControl red" onclick="addWrong()">خطأ X</button><button class="smallControl gray" onclick="previewRandomQuestion()">سؤال آخر</button><button class="smallControl gold" onclick="startSteal()">سرقة</button></div>
+<div class="timerPanel"><div id="timerShow" class="timerNum">${remaining}</div><div class="timerBtns"><button class="smallControl green" onclick="runTimer()">ابدأ</button><button class="smallControl red" onclick="stopTimer()">إيقاف</button><button class="smallControl" onclick="remaining++;timerShow.innerText=remaining">+</button><button class="smallControl" onclick="remaining=Math.max(1,remaining-1);timerShow.innerText=remaining">-</button></div></div>
+<div id="awardArea"></div>`
+}
+
 function toggleAns(i){let a=current.answers[i];if(!a)return;let el=document.getElementById("ans"+i);if(el.classList.contains("revealed")){el.classList.remove("revealed");roundPoints-=a.points}else{el.classList.add("revealed");roundPoints+=a.points}checkAllRevealed()}
 function checkAllRevealed(){let shown=document.querySelectorAll(".playAnswer.revealed").length;if(shown>=current.answers.length)showAward()}
 function showAward(){awardArea.innerHTML=`<div class="awardPanel"><h3>نقاط الجولة: ${roundPoints}</h3><div class="awardGrid"><button class="btn blue" onclick="award('a')">إعطاء النقاط لـ ${room.team1}</button><button class="btn red" onclick="award('b')">إعطاء النقاط لـ ${room.team2}</button></div></div>`}
@@ -131,12 +176,14 @@ function startSteal(){let thief=activeTeam==="a"?"b":"a";awardArea.innerHTML=`<d
 function award(t){if(t==="a"){scoreA+=roundPoints;document.getElementById("scoreA").innerText=scoreA}else{scoreB+=roundPoints;document.getElementById("scoreB").innerText=scoreB}roundPoints=0;wrongA=0;wrongB=0;renderWrongs();previewRandomQuestion()}
 function runTimer(){stopTimer();interval=setInterval(()=>{remaining--;timerShow.innerText=remaining;if(remaining<=0){stopTimer();showX()}},1000)}
 function stopTimer(){clearInterval(interval)}
+
 function showQuestionBank(){showPage("bankPage");menuPanel.classList.remove("show");buildBank()}
 function buildBank(){answersBox.innerHTML="";for(let i=1;i<=6;i++)answersBox.innerHTML+=`<label>الإجابة ${i}</label><div class="answerRow"><input id="a${i}" placeholder="الإجابة"><input id="p${i}" type="number" placeholder="نقاط"></div>`;renderBank()}
 function saveQuestion(){let q=questionText.value.trim();if(!q)return;let ans=[];for(let i=1;i<=6;i++){let t=document.getElementById("a"+i).value.trim(),p=Number(document.getElementById("p"+i).value)||0;if(t)ans.push({text:t,points:p})}if(editIndex!==null){questions[editIndex]={question:q,answers:ans};editIndex=null;saveBtn.innerText="حفظ السؤال"}else questions.push({question:q,answers:ans});localStorage.setItem("ff_questions",JSON.stringify(questions));questionText.value="";buildBank()}
 function renderBank(){questionsList.innerHTML=questions.map((q,i)=>`<div class="questionItem"><b>${q.question}</b><div>${q.answers.map(a=>`<div>${a.text} - ${a.points}</div>`).join("")}</div><div class="qActions"><button class="btn gray" onclick="editQ(${i})">تعديل</button><button class="btn red" onclick="questions.splice(${i},1);localStorage.setItem('ff_questions',JSON.stringify(questions));renderBank()">حذف</button></div></div>`).join("")}
 function editQ(i){editIndex=i;let q=questions[i];questionText.value=q.question;buildBank();questionText.value=q.question;q.answers.forEach((a,idx)=>{document.getElementById("a"+(idx+1)).value=a.text;document.getElementById("p"+(idx+1)).value=a.points});saveBtn.innerText="حفظ التعديل";window.scrollTo(0,0)}
 function importQuestions(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=x=>{let arr=JSON.parse(x.target.result);questions=questions.concat(arr);localStorage.setItem("ff_questions",JSON.stringify(questions));renderBank()};r.readAsText(f)}
+
 function showLobby(){showPage("lobbyPage")}
 function newRound(){scoreA=scoreB=wrongA=wrongB=0;roundPoints=0;showPage("settingsPage")}
 if(Number(localStorage.getItem("ff_login")||0)>Date.now())showPage("settingsPage");
