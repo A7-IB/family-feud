@@ -186,6 +186,28 @@ function importQuestions(e){let f=e.target.files[0];if(!f)return;let r=new FileR
 function showLobby(){showPage("lobbyPage")}
 function newRound(){scoreA=scoreB=wrongA=wrongB=0;roundPoints=0;showPage("settingsPage")}
 if(Number(localStorage.getItem("ff_login")||0)>Date.now())showPage("settingsPage");
+function syncTV(){
+const state={
+room:room,
+scoreA:scoreA,
+scoreB:scoreB,
+wrongA:wrongA,
+wrongB:wrongB,
+roundPoints:roundPoints,
+timer:remaining,
+activeTeam:activeTeam,
+question:current ? current.question : "",
+answers:current ? current.answers.map((a,i)=>({
+text:a.text,
+points:a.points,
+revealed:document.getElementById("ans"+i)?.classList.contains("revealed") || false
+})) : []
+};
+
+localStorage.setItem("ff_tv_state",JSON.stringify(state));
+}
+
+setInterval(syncTV,300);
 </script>
 </body>
 </html>
