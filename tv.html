@@ -4,138 +4,87 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AH TV Display</title>
-
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-html,body{width:100%;height:100%;overflow:hidden;background:#05091f;color:white}
-.stage{
-width:100vw;height:100vh;position:relative;
-background:radial-gradient(circle at center,#12195a 0%,#070b24 70%);
-padding:2.5vw;
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#05091f;color:white;width:100vw;height:100vh;overflow:hidden}
+.stage{width:100vw;height:100vh;background:radial-gradient(circle,#12195a,#05091f 75%);position:relative;padding:2vw}
 .logo{position:absolute;top:2vw;right:3vw;color:#e8bb3f;font-size:3vw;font-weight:900}
-
-.roundScore{
-position:absolute;top:4vh;left:50%;transform:translateX(-50%);
-width:8vw;height:8vw;min-width:85px;min-height:85px;
-border:.35vw solid #e8bb3f;border-radius:50%;
-display:flex;align-items:center;justify-content:center;
-font-size:4vw;font-weight:900;background:#050816;
-box-shadow:0 0 35px #e8bb3f66;z-index:3;
-}
-
-.timer{
-position:absolute;top:7vh;right:23vw;
-font-size:3vw;font-weight:900;color:white;
-}
-
-.team{
-position:absolute;top:11vh;width:15vw;height:58vh;
-border:.25vw solid #6b2fa8;border-radius:2vw;
-background:rgba(48,20,84,.35);
-display:flex;flex-direction:column;align-items:center;justify-content:center;
-}
-.team.left{left:3vw}
-.team.right{right:3vw}
-.teamName{font-size:2vw;font-weight:900;margin-bottom:1.2vw}
-.teamPoints{
-border:.25vw solid #e8bb3f;border-radius:1vw;
-width:11vw;height:5vw;display:flex;align-items:center;justify-content:center;
-font-size:3.4vw;font-weight:900;background:#050816;
-}
-.players,.currentPlayer{margin-top:1vw;color:#cbd5e1;font-size:1.25vw}
-.currentPlayer{color:#e8bb3f}
-.wrongs{margin-top:1vw;color:#aaa;font-size:2.2vw;letter-spacing:.4vw}
-
-.board{
-position:absolute;top:23vh;left:50%;transform:translateX(-50%);
-width:58vw;height:47vh;
-border:.3vw solid #e8bb3f;border-radius:2vw;
-padding:1vw;display:grid;grid-template-columns:1fr 1fr;gap:1vw;
-background:rgba(0,0,0,.22);
-}
-.answer{
-background:linear-gradient(145deg,#102b86,#172a78);
-border:.2vw solid #1e40af;border-radius:1.2vw;
-display:flex;align-items:center;justify-content:center;
-position:relative;font-size:2vw;font-weight:900;color:#9db7ff;
-}
-.answer .num{
-position:absolute;right:1vw;width:2.6vw;height:2.6vw;
-border-radius:50%;background:#1d4ed8;
-display:flex;align-items:center;justify-content:center;
-color:#8fb5ff;font-size:1.5vw;
-}
-.answer.revealed{
-color:white;justify-content:space-between;padding:0 4.5vw 0 2vw;
-}
-.answer.revealed .points{color:#e8bb3f;font-size:2.4vw}
-
-.qr{
-position:absolute;right:4vw;bottom:4vh;
-width:8vw;height:8vw;min-width:85px;min-height:85px;
-background:white;color:black;border-radius:1vw;
-display:flex;align-items:center;justify-content:center;
-font-size:2vw;font-weight:900;cursor:pointer;z-index:5;
-}
-.qr.full{
-position:fixed;inset:0;width:100vw;height:100vh;border-radius:0;
-z-index:20;font-size:8vw;
-}
-.qrText{position:absolute;right:5.3vw;bottom:1.8vh;color:#9ca3af;font-size:1vw}
-
-.bigX{
-position:fixed;inset:0;background:rgba(0,0,0,.55);
-display:none;align-items:center;justify-content:center;
-font-size:18vw;color:red;font-weight:900;text-shadow:0 0 60px red;z-index:10;
-}
-
-@media (orientation:portrait){
-.stage{transform:rotate(90deg);transform-origin:center center;width:100vh;height:100vw;position:absolute;top:50%;left:50%;margin-left:-50vh;margin-top:-50vw}
-}
+.roundScore{position:absolute;top:4vh;left:50%;transform:translateX(-50%);width:9vw;height:9vw;border:.35vw solid #e8bb3f;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:4vw;font-weight:900;background:#050816}
+.timer{position:absolute;top:7vh;right:24vw;font-size:3vw;font-weight:900}
+.team{position:absolute;top:13vh;width:16vw;height:58vh;border:.25vw solid #6b2fa8;border-radius:2vw;background:rgba(48,20,84,.35);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.left{left:3vw}.right{right:3vw}
+.teamName{font-size:2vw;font-weight:900;margin-bottom:1vw}
+.teamPoints{border:.25vw solid #e8bb3f;border-radius:1vw;width:11vw;height:5vw;display:flex;align-items:center;justify-content:center;font-size:3vw;font-weight:900;background:#050816}
+.players,.current{margin-top:1vw;color:#cbd5e1;font-size:1.2vw}.current{color:#e8bb3f}
+.wrongs{margin-top:1vw;font-size:2vw;color:#ef4444}
+.board{position:absolute;top:23vh;left:50%;transform:translateX(-50%);width:58vw;height:48vh;border:.3vw solid #e8bb3f;border-radius:2vw;padding:1vw;display:grid;grid-template-columns:1fr 1fr;gap:1vw;background:rgba(0,0,0,.25)}
+.answer{background:linear-gradient(145deg,#102b86,#172a78);border:.2vw solid #1e40af;border-radius:1.2vw;display:flex;align-items:center;justify-content:center;position:relative;font-size:2vw;font-weight:900;color:#9db7ff}
+.num{position:absolute;right:1vw;width:2.5vw;height:2.5vw;border-radius:50%;background:#1d4ed8;display:flex;align-items:center;justify-content:center}
+.answer.revealed{color:white;justify-content:space-between;padding:0 4vw 0 2vw}
+.points{color:#e8bb3f}
+.qr{position:absolute;right:4vw;bottom:4vh;width:8vw;height:8vw;background:white;color:black;border-radius:1vw;display:flex;align-items:center;justify-content:center;font-size:2vw;font-weight:900}
+.qr.full{position:fixed;inset:0;width:100vw;height:100vh;border-radius:0;z-index:20;font-size:8vw}
+.bigX{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;font-size:18vw;color:red;font-weight:900;text-shadow:0 0 60px red}
 </style>
 </head>
-
 <body>
+
 <div class="stage">
 <div class="logo">AH</div>
-<div class="roundScore">0</div>
-<div class="timer">60 ث ⏱</div>
+<div class="roundScore" id="roundScore">0</div>
+<div class="timer" id="timer">10 ث</div>
 
 <div class="team left">
-<div class="teamName">عائلة أ</div>
-<div class="teamPoints">0</div>
-<div class="players">اللاعبون: 0</div>
-<div class="currentPlayer">اللاعب الحالي</div>
-<div class="wrongs">× × ×</div>
+<div class="teamName" id="teamA">عائلة أ</div>
+<div class="teamPoints" id="scoreA">0</div>
+<div class="players">اللاعبون: <span id="playersA">0</span></div>
+<div class="current" id="currentA">اللاعب الحالي</div>
+<div class="wrongs" id="wrongA"></div>
 </div>
 
 <div class="team right">
-<div class="teamName">عائلة ب</div>
-<div class="teamPoints">0</div>
-<div class="players">اللاعبون: 0</div>
-<div class="currentPlayer">اللاعب الحالي</div>
-<div class="wrongs">× × ×</div>
+<div class="teamName" id="teamB">عائلة ب</div>
+<div class="teamPoints" id="scoreB">0</div>
+<div class="players">اللاعبون: <span id="playersB">0</span></div>
+<div class="current" id="currentB">اللاعب الحالي</div>
+<div class="wrongs" id="wrongB"></div>
 </div>
 
-<div class="board">
-<div class="answer"><span class="num">1</span>•••••</div>
-<div class="answer"><span class="num">2</span>•••••</div>
-<div class="answer"><span class="num">3</span>•••••</div>
-<div class="answer"><span class="num">4</span>•••••</div>
-<div class="answer"><span class="num">5</span>•••••</div>
-<div class="answer"><span class="num">6</span>•••••</div>
-</div>
+<div class="board" id="board"></div>
 
-<div class="qr" onclick="toggleQR()">QR</div>
-<div class="qrText">انضمام</div>
+<div class="qr" onclick="this.classList.toggle('full')">QR</div>
 <div class="bigX" id="bigX">X</div>
 </div>
 
 <script>
-function toggleQR(){
-document.querySelector(".qr").classList.toggle("full");
+function render(){
+const state=JSON.parse(localStorage.getItem("ff_tv_state")||"{}");
+
+teamA.innerText=state.room?.team1 || "عائلة أ";
+teamB.innerText=state.room?.team2 || "عائلة ب";
+scoreA.innerText=state.scoreA || 0;
+scoreB.innerText=state.scoreB || 0;
+roundScore.innerText=state.roundPoints || 0;
+timer.innerText=(state.timer || state.room?.timer || 10)+" ث";
+
+wrongA.innerText="❌".repeat(state.wrongA||0);
+wrongB.innerText="❌".repeat(state.wrongB||0);
+
+let html="";
+for(let i=0;i<6;i++){
+const a=state.answers?.[i];
+if(a && a.revealed){
+html+=`<div class="answer revealed"><span>${a.text}</span><span class="points">${a.points}</span></div>`;
+}else{
+html+=`<div class="answer"><span class="num">${i+1}</span>•••••</div>`;
 }
+}
+board.innerHTML=html;
+}
+
+setInterval(render,300);
+render();
 </script>
+
 </body>
 </html>
