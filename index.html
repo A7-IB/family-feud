@@ -41,7 +41,7 @@ label{display:block;margin:14px 0 7px;font-weight:800}
 .timerPanel,.awardPanel,.notice{background:#10182a;border:1px solid #344056;border-radius:18px;padding:14px;margin-top:18px;text-align:center}
 .timerNum{font-size:42px;color:var(--gold);font-weight:900}.timerBtns,.controlGrid,.awardGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.awardGrid{grid-template-columns:1fr 1fr}
 .smallControl{padding:12px;border-radius:12px;border:1px solid #344056;background:#172035;color:white;font-weight:900}
-.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modalBox{background:#11164f;border:1px solid #354091;border-radius:26px;padding:24px;width:100%;max-width:430px;text-align:center}.qr{width:220px;height:220px;background:white;color:#000;margin:20px auto;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:70px}
+.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}.modalBox{background:#11164f;border:1px solid #354091;border-radius:26px;padding:24px;width:100%;max-width:430px;text-align:center}
 .xOverlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;z-index:80;font-size:180px;color:#ff2748;font-weight:900;text-shadow:0 0 40px #ff2748;animation:popx .8s}
 @keyframes popx{0%{transform:scale(.3);opacity:0}50%{transform:scale(1.25);opacity:1}100%{transform:scale(1);opacity:1}}
 .questionItem{background:#172035;border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:12px}
@@ -61,7 +61,7 @@ label{display:block;margin:14px 0 7px;font-weight:800}
 <button class="btn gold" onclick="login()">دخول ↪</button>
 <div id="loginError" class="sub hidden" style="color:#ffb4c0;margin-top:12px">بيانات الدخول غير صحيحة</div>
 </div>
-<div class="sub">Version 3.5.0</div>
+<div class="sub">Version 3.6.0</div>
 </div>
 </section>
 
@@ -82,7 +82,7 @@ label{display:block;margin:14px 0 7px;font-weight:800}
 <div id="lobbyEmpty" class="centerEmpty"><div class="bigIcon">📖</div><div>اختر سؤالًا لمعاينته قبل البدء</div><button class="btn gold" style="max-width:360px" onclick="previewRandomQuestion()">🔍 معاينة سؤال عشوائي</button></div>
 <div id="previewBox" class="hidden"></div><div id="playBox" class="hidden"></div>
 <div id="menuPanel" class="menuPanel">
-<div class="menuItem" onclick="showTvModal()"><span>📺</span><div><b>عرض التلفزيون</b><small>QR code لفتح شاشة العرض</small></div></div>
+<div class="menuItem" onclick="showTvModal()"><span>📺</span><div><b>عرض التلفزيون</b><small>فتح شاشة العرض</small></div></div>
 <div class="menuItem" onclick="showQuestionBank()"><span>📖</span><div><b>بنك الأسئلة</b><small>إدارة الأسئلة والإجابات</small></div></div>
 <div class="sep"></div>
 <div class="menuItem" onclick="newRound()"><span>↻</span><div><b style="color:#ff6b7d">جولة جديدة</b></div></div>
@@ -98,7 +98,6 @@ label{display:block;margin:14px 0 7px;font-weight:800}
 </div></section>
 
 <div id="roomModal" class="modal hidden"><div class="modalBox"><h2>معلومات الغرفة</h2><div id="roomInfo"></div><button class="btn gold" onclick="hideRoomInfo()">إغلاق</button></div></div>
-<div id="tvModal" class="modal hidden"><div class="modalBox"><h2>شاشة التلفزيون</h2><div class="qr">QR</div><button class="btn gold" onclick="hideTvModal()">إغلاق</button></div></div>
 
 <script>
 let room={},timer=10,remaining=10,interval=null,scoreA=0,scoreB=0,wrongA=0,wrongB=0,current=null,roundPoints=0,activeTeam="",faceWinner="",editIndex=null;
@@ -114,7 +113,7 @@ function saveSettings(){room={team1:team1.value||"عائلة أ",team2:team2.val
 function toggleMenu(){menuPanel.classList.toggle("show")}
 function showRoomInfo(){roomInfo.innerHTML=`<p>الكود: ${room.code||"-"}</p><p>${room.team1} ضد ${room.team2}</p><p>طريقة الفوز: ${room.mode||"-"}</p><p>المؤقت: ${room.timer||timer} ث</p><p>عدد الأسئلة: ${questions.length}</p>`;roomModal.classList.remove("hidden")}
 function hideRoomInfo(){roomModal.classList.add("hidden")}
-function showTvModal(){tvModal.classList.remove("hidden");menuPanel.classList.remove("show")}function hideTvModal(){tvModal.classList.add("hidden")}
+function showTvModal(){menuPanel.classList.remove("show");window.open("tv.html","_blank")}
 function changeScore(t,v){if(t==="a"){scoreA=Math.max(0,scoreA+v);document.getElementById("scoreA").innerText=scoreA}else{scoreB=Math.max(0,scoreB+v);document.getElementById("scoreB").innerText=scoreB}}
 function renderWrongs(){document.getElementById("wrongA").innerHTML="❌".repeat(wrongA);document.getElementById("wrongB").innerHTML="❌".repeat(wrongB)}
 
